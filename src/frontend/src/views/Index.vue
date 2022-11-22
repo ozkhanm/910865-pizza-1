@@ -60,7 +60,8 @@
                 <label
                   v-for="size in pizzas.sizes"
                   :key="size.id"
-                  class="diameter__input diameter__input--small">
+                  class="diameter__input"
+                  :class="`diameter__input--${sizeMap[size.name]}`">
                   <input
                     type="radio"
                     name="diameter"
