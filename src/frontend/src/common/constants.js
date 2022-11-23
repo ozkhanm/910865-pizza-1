@@ -31,3 +31,19 @@ export const sauceMap = {
   "Томатный": "tomato",
   "Сливочный": "creamy",
 };
+
+export const ITEMS_INPUT_DATA = {
+  DOUGH: {
+    DEFAULT_RADIO_CHECK: 'Тонкое',
+    ITEM_NAME: 'dough',
+  },
+  SIZE: {
+    DEFAULT_RADIO_CHECK: '32 см',
+    ITEM_NAME: 'diameter',
+  },
+  SAUCE: {
+    DEFAULT_RADIO_CHECK: 'Томатный',
+    ITEM_NAME: 'sauce',
+    CONTAINER_MESSAGE: 'Основной соус:',
+  },
+};

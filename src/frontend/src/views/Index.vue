@@ -25,25 +25,12 @@
             <div class="sheet">
               <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
-              <div
-                v-if="pizzas.dough.length"
-                class="sheet__content dough">
-                <label
-                  v-for="type in pizzas.dough"
-                  :key="type.id"
-                  class="dough__input"
-                  :class="`dough__input--${doughMap[type.name]}`"
-                >
-                  <input
-                    type="radio"
-                    name="dought"
-                    :value="`${doughMap[type.name]}`"
-                    class="visually-hidden"
-                  >
-                  <b>{{ type.name }}</b>
-                  <span>{{ type.description }}</span>
-                </label>
-              </div>
+              <RadioButton
+                :items="pizzas.dough"
+                :itemMap="doughMap"
+                :itemName="ITEMS_INPUT_DATA.DOUGH.ITEM_NAME"
+                :defaultSelectedItem="ITEMS_INPUT_DATA.DOUGH.DEFAULT_RADIO_CHECK"
+              />
 
             </div>
 
@@ -53,24 +40,12 @@
             <div class="sheet">
               <h2 class="title title--small sheet__title">Выберите размер</h2>
 
-              <div
-                v-if="pizzas.sizes.length"
-                class="sheet__content diameter"
-              >
-                <label
-                  v-for="size in pizzas.sizes"
-                  :key="size.id"
-                  class="diameter__input"
-                  :class="`diameter__input--${sizeMap[size.name]}`">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    :value="`${sizeMap[size.name]}`"
-                    class="visually-hidden"
-                  >
-                  <span>{{ size.name }}</span>
-                </label>
-              </div>
+              <RadioButton
+                :items="pizzas.sizes"
+                :itemMap="sizeMap"
+                :itemName="ITEMS_INPUT_DATA.SIZE.ITEM_NAME"
+                :defaultSelectedItem="ITEMS_INPUT_DATA.SIZE.DEFAULT_RADIO_CHECK"
+              />
             </div>
           </div>
 
@@ -80,25 +55,13 @@
 
               <div class="sheet__content ingredients">
 
-                <div
-                  v-if="pizzas.sauces.length"
-                  class="ingredients__sauce"
-                >
-                  <p>Основной соус:</p>
-
-                  <label
-                    v-for="sauce in pizzas.sauces"
-                    :key="sauce.id"
-                    class="radio ingredients__input"
-                  >
-                    <input
-                      type="radio"
-                      name="sauce"
-                      :value="`${sauceMap[sauce.name]}`"
-                    >
-                    <span>{{ sauce.name }}</span>
-                  </label>
-                </div>
+                <RadioButton
+                  :items="pizzas.sauces"
+                  :itemMap="sauceMap"
+                  :itemName="ITEMS_INPUT_DATA.SAUCE.ITEM_NAME"
+                  :containerMessage="ITEMS_INPUT_DATA.SAUCE.CONTAINER_MESSAGE"
+                  :defaultSelectedItem="ITEMS_INPUT_DATA.SAUCE.DEFAULT_RADIO_CHECK"
+                />
 
                 <div class="ingredients__filling">
                   <p>Начинка:</p>
@@ -112,22 +75,13 @@
                       :key="ingredient.id"
                       class="ingredients__item"
                     >
-                      <span
+                      <SelectorItem
                         class="filling"
                         :class="`filling--${ingredientsMap[ingredient.name]}`"
-                      >
-                        {{ ingredient.name }}
-                      </span>
+                        :text="ingredient.name"
+                      />
 
-                      <div class="counter counter--orange ingredients__counter">
-                        <button type="button" class="counter__button counter__button--minus" disabled>
-                          <span class="visually-hidden">Меньше</span>
-                        </button>
-                        <input type="text" name="counter" class="counter__input" value="0">
-                        <button type="button" class="counter__button counter__button--plus">
-                          <span class="visually-hidden">Больше</span>
-                        </button>
-                      </div>
+                      <ItemCounter />
                     </li>
                   </ul>
 
@@ -167,11 +121,20 @@
 </template>
 
 <script>
+  import RadioButton from "@/common/components/RadioButton";
+  import ItemCounter from '../common/components/ItemCounter.vue';
+  import SelectorItem from '../common/components/SelectorItem.vue';
+
+  import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
   import pizzas from "@/static/pizza.json";
-  import { ingredientsMap, doughMap, sizeMap, sauceMap } from "@/common/constants";
 
   export default {
     name: "Index",
+    components: {
+        ItemCounter,
+        SelectorItem,
+        RadioButton,
+    },
     data() {
       return {
         pizzas,
@@ -179,6 +142,7 @@
         doughMap,
         sizeMap,
         sauceMap,
+        ITEMS_INPUT_DATA,
       };
     },
   }
