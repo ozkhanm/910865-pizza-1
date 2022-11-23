@@ -1,109 +1,35 @@
 <template>
-  <body>
-    <Header />
+  <form action="#" method="post">
 
-    <main class="content">
-      <form action="#" method="post">
+    <div class="content__wrapper">
+      <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
+      <DoughSelector />
 
-          <div class="content__dough">
+      <SizeSelector />
 
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите тесто</h2>
+      <IngredientsSelector />
 
-              <RadioButton
-                :items="pizzas.dough"
-                :itemMap="doughMap"
-                :itemName="ITEMS_INPUT_DATA.DOUGH.ITEM_NAME"
-                :defaultSelectedItem="ITEMS_INPUT_DATA.DOUGH.DEFAULT_RADIO_CHECK"
-              />
+      <div class="content__pizza">
+        <PizzaName />
 
-            </div>
+        <PizzaView />
 
-          </div>
+        <PriceCounter />
+      </div>
 
-          <div class="content__diameter">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите размер</h2>
+    </div>
 
-              <RadioButton
-                :items="pizzas.sizes"
-                :itemMap="sizeMap"
-                :itemName="ITEMS_INPUT_DATA.SIZE.ITEM_NAME"
-                :defaultSelectedItem="ITEMS_INPUT_DATA.SIZE.DEFAULT_RADIO_CHECK"
-              />
-            </div>
-          </div>
-
-          <div class="content__ingredients">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
-
-              <div class="sheet__content ingredients">
-
-                <RadioButton
-                  :items="pizzas.sauces"
-                  :itemMap="sauceMap"
-                  :itemName="ITEMS_INPUT_DATA.SAUCE.ITEM_NAME"
-                  :containerMessage="ITEMS_INPUT_DATA.SAUCE.CONTAINER_MESSAGE"
-                  :defaultSelectedItem="ITEMS_INPUT_DATA.SAUCE.DEFAULT_RADIO_CHECK"
-                />
-
-                <div class="ingredients__filling">
-                  <p>Начинка:</p>
-
-                  <ul
-                    v-if="pizzas.ingredients.length"
-                    class="ingredients__list"
-                  >
-                    <li
-                      v-for="ingredient in pizzas.ingredients"
-                      :key="ingredient.id"
-                      class="ingredients__item"
-                    >
-                      <SelectorItem
-                        class="filling"
-                        :class="`filling--${ingredientsMap[ingredient.name]}`"
-                        :text="ingredient.name"
-                      />
-
-                      <ItemCounter />
-                    </li>
-                  </ul>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="content__pizza">
-            <label class="input">
-              <span class="visually-hidden">Название пиццы</span>
-              <input type="text" name="pizza_name" placeholder="Введите название пиццы">
-            </label>
-
-            <PizzaView />
-
-            <PriceCounter />
-          </div>
-
-        </div>
-
-      </form>
-    </main>
-  </body>
+  </form>
 </template>
 
 <script>
-  import RadioButton from "@/common/components/RadioButton";
-  import ItemCounter from '../common/components/ItemCounter.vue';
-  import SelectorItem from '../common/components/SelectorItem.vue';
-  import PriceCounter from '../modules/builder/components/BuilderPriceCounter.vue';
-  import PizzaView from '../modules/builder/components/BuilderPizzaView.vue';
-  import Header from '../common/components/Header.vue';
+  import PriceCounter from "../modules/builder/components/BuilderPriceCounter.vue";
+  import PizzaView from "../modules/builder/components/BuilderPizzaView.vue";
+  import DoughSelector from "../modules/builder/components/BuilderDoughSelector.vue";
+  import SizeSelector from "../modules/builder/components/BuilderSizeSelector.vue";
+  import IngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector.vue";
+  import PizzaName from '../modules/builder/components/BuilderPizzaName.vue';
 
   import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
   import pizzas from "@/static/pizza.json";
@@ -111,12 +37,12 @@
   export default {
     name: "Index",
     components: {
-        Header,
-        ItemCounter,
-        SelectorItem,
-        RadioButton,
         PriceCounter,
         PizzaView,
+        DoughSelector,
+        SizeSelector,
+        IngredientsSelector,
+        PizzaName,
     },
     data() {
       return {

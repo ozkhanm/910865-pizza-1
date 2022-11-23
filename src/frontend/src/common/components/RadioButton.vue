@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import SelectorItem from './SelectorItem.vue';
+import SelectorItem from "./SelectorItem.vue";
 
-import { ITEMS_INPUT_DATA } from '../constants';
+import { ITEMS_INPUT_DATA } from "../constants";
 
 export default {
   name: "RadioButton",
@@ -62,10 +62,10 @@ export default {
   },
   computed: {
     containerClass() {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? 'ingredients__sauce' : `sheet__content ${this.itemName}`;
+      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__sauce" : `sheet__content ${this.itemName}`;
     },
     inputClass() {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? '' : 'visually-hidden';
+      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "" : "visually-hidden";
     },
     checkIsDoughComponent() {
       return this.itemName === ITEMS_INPUT_DATA.DOUGH.ITEM_NAME;
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     labelClass(name) {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? 'ingredients__input radio' : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
+      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__input radio" : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
     },
   }
 };

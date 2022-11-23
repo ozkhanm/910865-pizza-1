@@ -34,16 +34,16 @@ export const sauceMap = {
 
 export const ITEMS_INPUT_DATA = {
   DOUGH: {
-    DEFAULT_RADIO_CHECK: 'Тонкое',
-    ITEM_NAME: 'dough',
+    DEFAULT_RADIO_CHECK: "Тонкое",
+    ITEM_NAME: "dough",
   },
   SIZE: {
-    DEFAULT_RADIO_CHECK: '32 см',
-    ITEM_NAME: 'diameter',
+    DEFAULT_RADIO_CHECK: "32 см",
+    ITEM_NAME: "diameter",
   },
   SAUCE: {
-    DEFAULT_RADIO_CHECK: 'Томатный',
-    ITEM_NAME: 'sauce',
-    CONTAINER_MESSAGE: 'Основной соус:',
+    DEFAULT_RADIO_CHECK: "Томатный",
+    ITEM_NAME: "sauce",
+    CONTAINER_MESSAGE: "Основной соус:",
   },
 };
