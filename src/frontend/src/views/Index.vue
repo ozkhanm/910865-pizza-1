@@ -1,18 +1,6 @@
 <template>
   <body>
-    <header class="header">
-      <div class="header__logo">
-        <a href="index.html" class="logo">
-          <img src="@/assets/img/logo.svg" alt="V!U!E! Pizza logo" width="90" height="40">
-        </a>
-      </div>
-      <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
-      </div>
-      <div class="header__user">
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
+    <Header />
 
     <main class="content">
       <form action="#" method="post">
@@ -115,6 +103,7 @@
   import SelectorItem from '../common/components/SelectorItem.vue';
   import PriceCounter from '../modules/builder/components/BuilderPriceCounter.vue';
   import PizzaView from '../modules/builder/components/BuilderPizzaView.vue';
+  import Header from '../common/components/Header.vue';
 
   import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
   import pizzas from "@/static/pizza.json";
@@ -122,6 +111,7 @@
   export default {
     name: "Index",
     components: {
+        Header,
         ItemCounter,
         SelectorItem,
         RadioButton,
