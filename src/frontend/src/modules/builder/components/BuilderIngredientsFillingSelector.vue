@@ -3,11 +3,11 @@
     <p>Начинка:</p>
 
     <ul
-      v-if="pizzas.ingredients.length"
+      v-if="ingredients.length"
       class="ingredients__list"
     >
       <li
-        v-for="ingredient in pizzas.ingredients"
+        v-for="ingredient in ingredients"
         :key="ingredient.id"
         class="ingredients__item"
       >
@@ -29,7 +29,6 @@ import SelectorItem from "../../../common/components/SelectorItem.vue";
 import ItemCounter from "../../../common/components/ItemCounter.vue";
 
 import { ingredientsMap, ITEMS_INPUT_DATA } from "@/common/constants";
-import pizzas from "@/static/pizza.json";
 
 export default {
   name: "IngredientsFillingSelector",
@@ -41,9 +40,14 @@ export default {
     return {
       ingredientsMap,
       ITEMS_INPUT_DATA,
-      pizzas,
     };
   },
+  props: {
+    ingredients: {
+      type: Array,
+      required: true,
+    },
+  }
 };
 </script>
 

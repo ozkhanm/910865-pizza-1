@@ -6,14 +6,16 @@
       <div class="sheet__content ingredients">
 
         <RadioButton
-          :items="pizzas.sauces"
+          :items="sauces"
           :itemMap="sauceMap"
           :itemName="ITEMS_INPUT_DATA.SAUCE.ITEM_NAME"
           :containerMessage="ITEMS_INPUT_DATA.SAUCE.CONTAINER_MESSAGE"
           :defaultSelectedItem="ITEMS_INPUT_DATA.SAUCE.DEFAULT_RADIO_CHECK"
         />
 
-        <IngredientsFilling />
+        <IngredientsFilling
+          :ingredients="ingredients"
+        />
 
       </div>
     </div>
@@ -25,7 +27,6 @@ import RadioButton from "../../../common/components/RadioButton.vue";
 import IngredientsFilling from "./BuilderIngredientsFillingSelector.vue";
 
 import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
-import pizzas from "@/static/pizza.json";
 
 export default {
   name: "IngredientsSelector",
@@ -37,8 +38,17 @@ export default {
     return {
       sauceMap,
       ITEMS_INPUT_DATA,
-      pizzas,
     };
+  },
+  props: {
+    sauces: {
+      type: Array,
+      required: true,
+    },
+    ingredients: {
+      type: Array,
+      required: true,
+    },
   },
 };
 </script>
