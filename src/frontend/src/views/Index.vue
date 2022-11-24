@@ -20,7 +20,9 @@
       <div class="content__pizza">
         <PizzaName />
 
-        <PizzaView />
+        <PizzaView
+          :selectedIngredients="selectedIngredients"
+        />
 
         <PriceCounter />
       </div>
@@ -36,7 +38,7 @@
   import DoughSelector from "../modules/builder/components/BuilderDoughSelector.vue";
   import SizeSelector from "../modules/builder/components/BuilderSizeSelector.vue";
   import IngredientsSelector from "../modules/builder/components/BuilderIngredientsSelector.vue";
-  import PizzaName from '../modules/builder/components/BuilderPizzaName.vue';
+  import PizzaName from "../modules/builder/components/BuilderPizzaName.vue";
 
   import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
   import pizzas from "@/static/pizza.json";
@@ -59,6 +61,7 @@
         sizeMap,
         sauceMap,
         ITEMS_INPUT_DATA,
+        selectedIngredients: [],
       };
     },
   }

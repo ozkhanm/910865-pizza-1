@@ -75,7 +75,7 @@ export default {
     labelClass(name) {
       return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__input radio" : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
     },
-  }
+  },
 };
 </script>
 

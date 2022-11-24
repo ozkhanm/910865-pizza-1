@@ -11,11 +11,15 @@
         :key="ingredient.id"
         class="ingredients__item"
       >
-        <SelectorItem
-          class="filling"
-          :class="`filling--${ingredientsMap[ingredient.name]}`"
-          :text="ingredient.name"
-        />
+        <AppDrag
+          :transferData="ingredient"
+        >
+          <SelectorItem
+            class="filling"
+            :class="`filling--${ingredientsMap[ingredient.name]}`"
+            :text="ingredient.name"
+          />
+        </AppDrag>
 
         <ItemCounter />
       </li>
@@ -27,6 +31,7 @@
 <script>
 import SelectorItem from "../../../common/components/SelectorItem.vue";
 import ItemCounter from "../../../common/components/ItemCounter.vue";
+import AppDrag from "../../../common/components/AppDrag.vue";
 
 import { ingredientsMap, ITEMS_INPUT_DATA } from "@/common/constants";
 
@@ -35,6 +40,7 @@ export default {
   components: {
     SelectorItem,
     ItemCounter,
+    AppDrag,
   },
   data() {
     return {
@@ -47,7 +53,7 @@ export default {
       type: Array,
       required: true,
     },
-  }
+  },
 };
 </script>
 

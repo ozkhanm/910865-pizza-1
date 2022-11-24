@@ -47,3 +47,5 @@ export const ITEMS_INPUT_DATA = {
     CONTAINER_MESSAGE: "Основной соус:",
   },
 };
+
+export const MAX_INGREDIENTS_NUMBER = 3;
