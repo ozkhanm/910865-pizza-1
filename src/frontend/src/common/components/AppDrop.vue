@@ -1,6 +1,6 @@
 <template>
   <div
-    @drop.stop="onDrop"
+    @drop.stop="dropHandler"
     @dragover.prevent
   >
     <slot />
@@ -11,7 +11,7 @@
 export default {
   name: "AppDrop",
   methods: {
-    onDrop({ dataTransfer }) {
+    dropHandler({ dataTransfer }) {
       if (!dataTransfer) {
         return;
       }

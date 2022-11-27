@@ -16,7 +16,8 @@
           :name="itemName"
           :value="`${itemMap[item.name]}`"
           :class="inputClass"
-          :checked="item.name === defaultSelectedItem"
+          :checked="item.name === value"
+          @change="radioInputChangeHandler"
         >
         <b
           v-if="checkIsDoughComponent"
@@ -55,7 +56,7 @@ export default {
       type: String,
       required: false,
     },
-    defaultSelectedItem: {
+    value: {
       type: String,
       required: true,
     },
@@ -74,6 +75,11 @@ export default {
   methods: {
     labelClass(name) {
       return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__input radio" : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
+    },
+    radioInputChangeHandler(e) {
+      const updValue = Object.entries(this.itemMap).find(([, b]) => b === e.target.value)[0];
+
+      this.$emit("change", updValue);
     },
   },
 };

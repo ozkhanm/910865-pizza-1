@@ -1,6 +1,9 @@
 <template>
   <div class="content__constructor">
-    <div class="pizza pizza--foundation--big-tomato">
+    <div
+      class="pizza"
+      :class="getCustomPizzaClass"
+    >
       <AppDrop
         @drop="itemDropHandler"
       >
@@ -9,7 +12,7 @@
             v-for="item in selectedIngredients"
             :key="item.id"
             class="pizza__filling"
-            :class="`pizza__filling--${ingredientsMap[item.name]}`"
+            :class="getPizzaFillingClass(item)"
            />
         </div>
       </AppDrop>
@@ -20,7 +23,7 @@
 <script>
 import AppDrop from "../../../common/components/AppDrop.vue";
 
-import { ingredientsMap, MAX_INGREDIENTS_NUMBER } from "../../../common/constants";
+import { ingredientsMap, MAX_INGREDIENTS_NUMBER, sauceMap, doughClassMap } from "../../../common/constants";
 
 export default {
   name: "PizzaView",
@@ -34,24 +37,49 @@ export default {
   },
   props: {
     selectedIngredients: {
-      type: Array,
+      type: Object,
+      required: true,
+    },
+    currentDough: {
+      type: String,
+      required: true,
+    },
+    currentSauce: {
+      type: String,
       required: true,
     },
   },
+  computed: {
+    getCustomPizzaClass() {
+      return `pizza--foundation--${doughClassMap[this.currentDough]}-${sauceMap[this.currentSauce]}`;
+    },
+  },
   methods: {
-    itemDropHandler(item) {
-      const ingredient = this.selectedIngredients.find(it => it.name === item.name);
+    getPizzaFillingClass(item) {
+      let additionalIngredientsClass = "";
 
-      if (ingredient === undefined) {
-        this.selectedIngredients.push({
-          name: item.name,
-          id: item.id,
-          amount: 1,
-        });
-      } else {
-        if (ingredient.amount !== MAX_INGREDIENTS_NUMBER) {
-          ingredient.amount++;
+      if (item.amount === 2) {
+        additionalIngredientsClass = "pizza__filling--second";
+      } else if (item.amount === 3) {
+        additionalIngredientsClass = "pizza__filling--third";
+      }
+
+      return `pizza__filling--${ingredientsMap[item.name]} ${additionalIngredientsClass}`;
+    },
+    itemDropHandler(item) {
+      const ingredients = { ...this.selectedIngredients };
+
+      if (ingredients[item.name]) {
+        if (ingredients[item.name].amount !== MAX_INGREDIENTS_NUMBER) {
+          ingredients[item.name].amount++;
+          this.$emit("change", ingredients);
         }
+      } else {
+        ingredients[item.name] = {
+          ...item,
+          amount: 1,
+        };
+        this.$emit("change", ingredients);
       }
     },
   },

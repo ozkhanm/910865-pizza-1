@@ -8,7 +8,8 @@
         :items="dough"
         :itemMap="doughMap"
         :itemName="ITEMS_INPUT_DATA.DOUGH.ITEM_NAME"
-        :defaultSelectedItem="ITEMS_INPUT_DATA.DOUGH.DEFAULT_RADIO_CHECK"
+        :value="currentDough"
+        @change="$emit('change', $event)"
       />
 
     </div>
@@ -32,6 +33,10 @@ export default {
   props: {
     dough: {
       type: Array,
+      required: true,
+    },
+    currentDough: {
+      type: String,
       required: true,
     },
   },

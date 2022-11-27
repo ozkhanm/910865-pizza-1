@@ -1,7 +1,7 @@
 <template>
   <div
     :draggable="true"
-    @dragstart.self="onDrag"
+    @dragstart.self="dragHandler"
   >
     <slot />
   </div>
@@ -17,7 +17,7 @@ export default {
     },
   },
   methods: {
-    onDrag({ dataTransfer }) {
+    dragHandler({ dataTransfer }) {
       dataTransfer.setData(
         "ingredient",
         JSON.stringify(this.transferData)

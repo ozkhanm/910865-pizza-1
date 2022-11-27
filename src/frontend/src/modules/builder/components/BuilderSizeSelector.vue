@@ -7,7 +7,8 @@
         :items="sizes"
         :itemMap="sizeMap"
         :itemName="ITEMS_INPUT_DATA.SIZE.ITEM_NAME"
-        :defaultSelectedItem="ITEMS_INPUT_DATA.SIZE.DEFAULT_RADIO_CHECK"
+        :value="currentSize"
+        @change="$emit('change', $event)"
       />
     </div>
   </div>
@@ -32,6 +33,10 @@ export default {
   props: {
     sizes: {
       type: Array,
+      required: true,
+    },
+    currentSize: {
+      type: String,
       required: true,
     },
   },

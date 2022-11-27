@@ -21,7 +21,14 @@
           />
         </AppDrag>
 
-        <ItemCounter />
+        <ItemCounter
+          :ingredient="selectedIngredients[ingredient.name]"
+          :ingredientName="ingredient.name"
+          :ingredients="ingredients"
+          @blur="$emit('blur', $event)"
+          @plusButtonClick="$emit('plusButtonClick', $event)"
+          @minusButtonClick="$emit('minusButtonClick', $event)"
+        />
       </li>
     </ul>
 
@@ -51,6 +58,10 @@ export default {
   props: {
     ingredients: {
       type: Array,
+      required: true,
+    },
+    selectedIngredients: {
+      type: Object,
       required: true,
     },
   },

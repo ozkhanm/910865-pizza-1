@@ -21,6 +21,11 @@ export const doughMap = {
   "Толстое": "large",
 };
 
+export const doughClassMap = {
+  "Тонкое": "small",
+  "Толстое": "big",
+};
+
 export const sizeMap = {
   "23 см": "small",
   "32 см": "normal",
