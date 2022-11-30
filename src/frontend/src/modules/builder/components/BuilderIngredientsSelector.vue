@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import RadioButton from "../../../common/components/RadioButton.vue";
+import RadioButton from "@/common/components/RadioButton.vue";
 import IngredientsFilling from "./BuilderIngredientsFillingSelector.vue";
 
 import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";

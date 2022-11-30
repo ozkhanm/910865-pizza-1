@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import SelectorItem from "../../../common/components/SelectorItem.vue";
-import ItemCounter from "../../../common/components/ItemCounter.vue";
-import AppDrag from "../../../common/components/AppDrag.vue";
+import SelectorItem from "@/common/components/SelectorItem.vue";
+import ItemCounter from "@/common/components/ItemCounter.vue";
+import AppDrag from "@/common/components/AppDrag.vue";
 
 import { ingredientsMap, ITEMS_INPUT_DATA } from "@/common/constants";
 

@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <AppLayout />
+    <AppLayout>
+      <RouterView />
+    </AppLayout>
   </div>
 </template>
 
 <script>
-import AppLayout from "./layouts/AppLayout.vue";
+import AppLayout from "@/layouts/AppLayout.vue";
 
 export default {
   name: "App",

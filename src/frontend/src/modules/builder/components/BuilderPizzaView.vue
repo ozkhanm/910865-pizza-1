@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import AppDrop from "../../../common/components/AppDrop.vue";
+import AppDrop from "@/common/components/AppDrop.vue";
 
-import { ingredientsMap, MAX_INGREDIENTS_NUMBER, sauceMap, doughClassMap } from "../../../common/constants";
+import { ingredientsMap, MAX_INGREDIENTS_NUMBER, sauceMap, doughClassMap } from "@/common/constants";
 
 export default {
   name: "PizzaView",
