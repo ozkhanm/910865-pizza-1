@@ -3,7 +3,7 @@
     <button
       type="button"
       class="counter__button counter__button--minus"
-      :disabled="minusButtonDisabled"
+      :disabled="count === minCount"
       @click="minusButtonClickHandler"
     >
       <span class="visually-hidden">Меньше</span>
@@ -12,13 +12,13 @@
       type="text"
       name="counter"
       class="counter__input"
-      :value="itemCount"
+      :value="count"
       @change="counterChangeHandler"
     >
     <button
       type="button"
       class="counter__button counter__button--plus"
-      :disabled="plusButtonDisabled"
+      :disabled="count === maxCount"
       @click="plusButtonClickHandler"
     >
       <span class="visually-hidden">Больше</span>
@@ -27,32 +27,20 @@
 </template>
 
 <script>
-import { MAX_INGREDIENTS_NUMBER } from "../constants";
-
 export default {
   name: "ItemCounter",
   props: {
-    ingredient: {
-      type: [Object, undefined],
+    count: {
+      type: Number,
+      default: 0,
     },
-    ingredients: {
-      type: Array,
+    minCount: {
+      type: Number,
       required: true,
     },
-    ingredientName: {
-      type: String,
+    maxCount: {
+      type: Number,
       required: true,
-    },
-  },
-  computed: {
-    itemCount() {
-      return this.ingredient?.amount || "0";
-    },
-    minusButtonDisabled() {
-      return this.ingredient?.amount === undefined;
-    },
-    plusButtonDisabled() {
-      return this.ingredient?.amount === MAX_INGREDIENTS_NUMBER;
     },
   },
   methods: {
@@ -60,42 +48,16 @@ export default {
       let value = parseInt(e.target.value);
 
       if  (isNaN(value)) {
-        value = this.itemCount;
-      } else {
-        if (value < 0) {
-          value = 0;
-        } else if (e.target.value >= 0 && e.target.value <= MAX_INGREDIENTS_NUMBER) {
-          value = parseInt(value);
-        } else if (value > MAX_INGREDIENTS_NUMBER) {
-          value = MAX_INGREDIENTS_NUMBER;
-        }
+        value = this.count;
       }
 
-      const ingredientTemplate = { ...this.ingredients.find(it => it.name === this.ingredientName) };
-
-      ingredientTemplate.amount = value;
-      this.$emit("blur", ingredientTemplate);
+      this.$emit("blur", value);
     },
     minusButtonClickHandler() {
-      if (this.ingredient.amount !== 0) {
-        const updatedIngredient = { ...this.ingredient };
-
-        updatedIngredient.amount--;
-        this.$emit("minusButtonClick", updatedIngredient);
-      }
+      this.$emit("minusButtonClick");
     },
     plusButtonClickHandler() {
-      if (this.ingredient === undefined) {
-        const ingredientTemplate = { ...this.ingredients.find(it => it.name === this.ingredientName) };
-
-        ingredientTemplate.amount = 1;
-        this.$emit("plusButtonClick", ingredientTemplate);
-      } else {
-        const updatedIngredient = { ...this.ingredient };
-
-        updatedIngredient.amount++;
-        this.$emit("plusButtonClick", updatedIngredient);
-      }
+      this.$emit("plusButtonClick");
     },
   },
 };

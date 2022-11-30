@@ -61,7 +61,7 @@ import SizeSelector from "@/modules/builder/components/BuilderSizeSelector.vue";
 import IngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector.vue";
 import PizzaName from "@/modules/builder/components/BuilderPizzaName.vue";
 
-import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
+import { ingredientsMap, doughMap, sizeMap, sauceMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 import pizzas from "@/static/pizza.json";
 
 export default {
@@ -120,37 +120,59 @@ export default {
       this.selectedIngredients = { ...this.selectedIngredients, ...ingredients };
     },
     decreaseIngredientCount(ingredient) {
-      const ingredients = { ...this.selectedIngredients };
+      const selectedIngredients = { ...this.selectedIngredients };
+      const ingredientName = ingredient.name;
+      const count = --ingredient.amount;
 
-      if (ingredient.amount === 0) {
-        delete ingredients[ingredient.name];
+      if (count === 0) {
+        delete selectedIngredients[ingredientName];
       } else {
-        ingredients[ingredient.name] = ingredient;
+        selectedIngredients[ingredientName] = ingredient;
       }
 
-      this.selectedIngredients = { ...ingredients };
+      this.selectedIngredients = { ...selectedIngredients };
     },
     increaseIngredientCount(ingredient) {
-      const ingredients = { ...this.selectedIngredients };
+      const selectedIngredients = { ...this.selectedIngredients };
+      const ingredientName = ingredient.name;
 
-      if (ingredients[ingredient.name]) {
-        ingredients[ingredient.name] = ingredient;
+      if (selectedIngredients[ingredientName]) {
+        selectedIngredients[ingredientName].amount++;
       } else {
-        ingredients[ingredient.name] = ingredient;
+        selectedIngredients[ingredientName] = ingredient;
+        selectedIngredients[ingredientName].amount = 1;
       }
 
-      this.selectedIngredients = { ...ingredients };
+      this.selectedIngredients = { ...selectedIngredients };
     },
-    setCount(ingredient) {
-      const ingredients = { ...this.selectedIngredients };
+    setCount(count, ingredientName) {
+      let value;
+      const selectedIngredients = { ...this.selectedIngredients };
 
-      if (ingredient.amount === 0) {
-        delete ingredients[ingredient.name];
-      } else {
-        ingredients[ingredient.name] = ingredient;
+      if (count < 0) {
+        value = 0;
+      } else if (count >= 0 && count <= MAX_INGREDIENTS_NUMBER) {
+        value = parseInt(count);
+      } else if (count > MAX_INGREDIENTS_NUMBER) {
+        value = MAX_INGREDIENTS_NUMBER;
       }
 
-      this.selectedIngredients = { ...ingredients };
+      const isAlreadySelected = !!selectedIngredients[ingredientName];
+
+      if (isAlreadySelected) {
+        if (value === 0) {
+          delete selectedIngredients[ingredientName];
+        } else {
+          selectedIngredients[ingredientName].amount = value;
+        }
+      } else {
+        if (value !== 0) {
+          selectedIngredients[ingredientName] = this.pizzas.ingredients.find(it => it.name === ingredientName);
+          selectedIngredients[ingredientName].amount = value;
+        }
+      }
+
+      this.selectedIngredients = { ...selectedIngredients };
     },
     addToCart() {
       const newCartItem = {

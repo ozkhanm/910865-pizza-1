@@ -17,9 +17,9 @@
         <IngredientsFilling
           :ingredients="ingredients"
           :selectedIngredients="selectedIngredients"
-          @blur="$emit('blur', $event)"
-          @plusButtonClick="$emit('plusButtonClick', $event)"
-          @minusButtonClick="$emit('minusButtonClick', $event)"
+          @blur="($event, ingredientName) => $emit('blur', $event, ingredientName)"
+          @plusButtonClick="(ingredient) => $emit('plusButtonClick', ingredient)"
+          @minusButtonClick="(ingredient) => $emit('minusButtonClick', ingredient)"
         />
 
       </div>
