@@ -22,12 +22,12 @@
         </AppDrag>
 
         <ItemCounter
-          :ingredient="selectedIngredients[ingredient.name]"
-          :ingredientName="ingredient.name"
-          :ingredients="ingredients"
-          @blur="$emit('blur', $event)"
-          @plusButtonClick="$emit('plusButtonClick', $event)"
-          @minusButtonClick="$emit('minusButtonClick', $event)"
+          :count="count(ingredient.name)"
+          :minCount="0"
+          :maxCount="MAX_INGREDIENTS_NUMBER"
+          @blur="$emit('blur', $event, ingredient.name)"
+          @plusButtonClick="$emit('plusButtonClick', ingredient)"
+          @minusButtonClick="$emit('minusButtonClick', ingredient)"
         />
       </li>
     </ul>
@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import SelectorItem from "../../../common/components/SelectorItem.vue";
-import ItemCounter from "../../../common/components/ItemCounter.vue";
-import AppDrag from "../../../common/components/AppDrag.vue";
+import SelectorItem from "@/common/components/SelectorItem.vue";
+import ItemCounter from "@/common/components/ItemCounter.vue";
+import AppDrag from "@/common/components/AppDrag.vue";
 
-import { ingredientsMap, ITEMS_INPUT_DATA } from "@/common/constants";
+import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 
 export default {
   name: "IngredientsFillingSelector",
@@ -53,6 +53,7 @@ export default {
     return {
       ingredientsMap,
       ITEMS_INPUT_DATA,
+      MAX_INGREDIENTS_NUMBER,
     };
   },
   props: {
@@ -63,6 +64,11 @@ export default {
     selectedIngredients: {
       type: Object,
       required: true,
+    },
+  },
+  methods: {
+    count(name) {
+      return this.selectedIngredients[name]?.amount;
     },
   },
 };

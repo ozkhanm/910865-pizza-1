@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import RadioButton from "../../../common/components/RadioButton.vue";
+import RadioButton from "@/common/components/RadioButton.vue";
 
 import { sizeMap, ITEMS_INPUT_DATA } from "@/common/constants";
 

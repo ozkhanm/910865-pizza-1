@@ -17,9 +17,9 @@
         <IngredientsFilling
           :ingredients="ingredients"
           :selectedIngredients="selectedIngredients"
-          @blur="$emit('blur', $event)"
-          @plusButtonClick="$emit('plusButtonClick', $event)"
-          @minusButtonClick="$emit('minusButtonClick', $event)"
+          @blur="($event, ingredientName) => $emit('blur', $event, ingredientName)"
+          @plusButtonClick="(ingredient) => $emit('plusButtonClick', ingredient)"
+          @minusButtonClick="(ingredient) => $emit('minusButtonClick', ingredient)"
         />
 
       </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import RadioButton from "../../../common/components/RadioButton.vue";
+import RadioButton from "@/common/components/RadioButton.vue";
 import IngredientsFilling from "./BuilderIngredientsFillingSelector.vue";
 
 import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
