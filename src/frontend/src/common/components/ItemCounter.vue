@@ -47,7 +47,7 @@ export default {
     counterChangeHandler(e) {
       let value = parseInt(e.target.value);
 
-      if  (isNaN(value)) {
+      if (isNaN(value)) {
         value = this.count;
       }
 

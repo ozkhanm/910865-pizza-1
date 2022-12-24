@@ -122,11 +122,12 @@ export default {
     decreaseIngredientCount(ingredient) {
       const selectedIngredients = { ...this.selectedIngredients };
       const ingredientName = ingredient.name;
-      const count = --ingredient.amount;
+      const count = --selectedIngredients[ingredientName].amount;
 
       if (count === 0) {
         delete selectedIngredients[ingredientName];
       } else {
+        ingredient.amount = count;
         selectedIngredients[ingredientName] = ingredient;
       }
 
