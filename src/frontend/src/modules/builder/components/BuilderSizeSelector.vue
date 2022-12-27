@@ -8,15 +8,18 @@
         :itemMap="sizeMap"
         :itemName="ITEMS_INPUT_DATA.SIZE.ITEM_NAME"
         :value="currentSize"
-        @change="$emit('change', $event)"
+        :inputChangeHandler="updateSizeValue"
       />
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 import RadioButton from "@/common/components/RadioButton.vue";
 
+import { UPDATE_SIZE_VALUE } from "@/store/mutation-types";
 import { sizeMap, ITEMS_INPUT_DATA } from "@/common/constants";
 
 export default {
@@ -30,15 +33,17 @@ export default {
       ITEMS_INPUT_DATA,
     };
   },
-  props: {
-    sizes: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState(["pizzas", "currentSize"]),
+
+    sizes() {
+      return this.pizzas.sizes;
     },
-    currentSize: {
-      type: String,
-      required: true,
-    },
+  },
+  methods: {
+    ...mapMutations({
+      updateSizeValue: UPDATE_SIZE_VALUE,
+    }),
   },
 };
 </script>

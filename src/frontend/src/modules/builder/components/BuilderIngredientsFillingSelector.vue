@@ -22,24 +22,28 @@
         </AppDrag>
 
         <ItemCounter
+          :class="`counter--orange ingredients__counter`"
           :count="count(ingredient.name)"
+          :item="ingredient"
           :minCount="0"
           :maxCount="MAX_INGREDIENTS_NUMBER"
-          @blur="$emit('blur', $event, ingredient.name)"
-          @plusButtonClick="$emit('plusButtonClick', ingredient)"
-          @minusButtonClick="$emit('minusButtonClick', ingredient)"
+          :inputChangeHandler="setCount"
+          :minusButtonClickHandler="decreaseIngredientCount"
+          :plusButtonClickHandler="increaseIngredientCount"
         />
       </li>
     </ul>
-
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 import SelectorItem from "@/common/components/SelectorItem.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import AppDrag from "@/common/components/AppDrag.vue";
 
+import { DECREASE_INGREDIENT_COUNT, INCREASE_INGREDIENT_COUNT, SET_INGREDIENT_COUNT } from "@/store/mutation-types";
 import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 
 export default {
@@ -56,19 +60,22 @@ export default {
       MAX_INGREDIENTS_NUMBER,
     };
   },
-  props: {
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    selectedIngredients: {
-      type: Object,
-      required: true,
+  computed: {
+    ...mapState(["selectedIngredients", "pizzas"]),
+
+    ingredients() {
+      return this.pizzas.ingredients;
     },
   },
   methods: {
+    ...mapMutations({
+      decreaseIngredientCount: DECREASE_INGREDIENT_COUNT,
+      increaseIngredientCount: INCREASE_INGREDIENT_COUNT,
+      setCount: SET_INGREDIENT_COUNT,
+    }),
+
     count(name) {
-      return this.selectedIngredients[name]?.amount;
+      return this.selectedIngredients[name]?.amount || 0;
     },
   },
 };

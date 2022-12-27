@@ -1,13 +1,14 @@
 <template>
-  <div class="counter counter--orange ingredients__counter">
+  <div class="counter">
     <button
       type="button"
       class="counter__button counter__button--minus"
       :disabled="count === minCount"
-      @click="minusButtonClickHandler"
+      @click="minusButtonClickHandler(item)"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
+
     <input
       type="text"
       name="counter"
@@ -15,11 +16,13 @@
       :value="count"
       @change="counterChangeHandler"
     >
+
     <button
       type="button"
       class="counter__button counter__button--plus"
-      :disabled="count === maxCount"
-      @click="plusButtonClickHandler"
+      :class="additionalPlusButtonClass"
+      :disabled="count == maxCount"
+      @click="plusButtonClickHandler(item)"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -27,6 +30,8 @@
 </template>
 
 <script>
+import { MAX_INGREDIENTS_NUMBER } from "@/common/constants";
+
 export default {
   name: "ItemCounter",
   props: {
@@ -42,22 +47,49 @@ export default {
       type: Number,
       required: true,
     },
+    plusButtonClickHandler: {
+      type: Function,
+      required: true,
+    },
+    minusButtonClickHandler: {
+      type: Function,
+      required: true,
+    },
+    item: {
+      type: Object,
+      required: true,
+    },
+    inputChangeHandler: {
+      type: Function,
+      required: true,
+    },
+  },
+  computed: {
+    additionalPlusButtonClass() {
+      return this.$router.currentRoute.name === "Index" ? null : "counter__button--orange";
+    },
   },
   methods: {
     counterChangeHandler(e) {
       let value = parseInt(e.target.value);
+      const isInputValid = String(parseInt(e.target.value)).length === e.target.value.length;
 
-      if (isNaN(value)) {
-        value = this.count;
+      if (value < 0) {
+        value = 0;
       }
 
-      this.$emit("blur", value);
-    },
-    minusButtonClickHandler() {
-      this.$emit("minusButtonClick");
-    },
-    plusButtonClickHandler() {
-      this.$emit("plusButtonClick");
+      if (this.maxCount !== Infinity) {
+        if (value >= 0 && value <= MAX_INGREDIENTS_NUMBER) {
+          value = parseInt(value);
+        } else if (value > MAX_INGREDIENTS_NUMBER) {
+          value = MAX_INGREDIENTS_NUMBER;
+        }
+      }
+
+      this.inputChangeHandler({
+        count: isInputValid ? value : 0,
+        item: this.item,
+      });
     },
   },
 };

@@ -3,9 +3,8 @@
       v-if="items.length"
       :class="containerClass"
     >
-      <p
-        v-if="containerMessage && containerMessage.length > 0"
-      >{{ containerMessage }}</p>
+      <p v-if="containerMessage && containerMessage.length > 0">{{ containerMessage }}</p>
+
       <label
         v-for="item in items"
         :key="item.id"
@@ -19,9 +18,9 @@
           :checked="item.name === value"
           @change="radioInputChangeHandler"
         >
-        <b
-          v-if="checkIsDoughComponent"
-        >{{ item.name }}</b>
+
+        <b v-if="checkIsDoughComponent">{{ item.name }}</b>
+
         <SelectorItem
           :text="checkIsDoughComponent ? item.description : item.name"
         />
@@ -60,6 +59,10 @@ export default {
       type: String,
       required: true,
     },
+    inputChangeHandler: {
+      type: Function,
+      required: true,
+    },
   },
   computed: {
     containerClass() {
@@ -79,7 +82,7 @@ export default {
     radioInputChangeHandler(e) {
       const updValue = Object.entries(this.itemMap).find(([, b]) => b === e.target.value)[0];
 
-      this.$emit("change", updValue);
+      this.inputChangeHandler(updValue);
     },
   },
 };

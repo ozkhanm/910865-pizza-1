@@ -4,33 +4,28 @@
       <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
 
       <div class="sheet__content ingredients">
-
         <RadioButton
           :items="sauces"
           :itemMap="sauceMap"
           :itemName="ITEMS_INPUT_DATA.SAUCE.ITEM_NAME"
           :containerMessage="ITEMS_INPUT_DATA.SAUCE.CONTAINER_MESSAGE"
           :value="currentSauce"
-          @change="$emit('change', $event)"
+          :inputChangeHandler="updateSauceValue"
         />
 
-        <IngredientsFilling
-          :ingredients="ingredients"
-          :selectedIngredients="selectedIngredients"
-          @blur="($event, ingredientName) => $emit('blur', $event, ingredientName)"
-          @plusButtonClick="(ingredient) => $emit('plusButtonClick', ingredient)"
-          @minusButtonClick="(ingredient) => $emit('minusButtonClick', ingredient)"
-        />
-
+        <IngredientsFilling />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 import RadioButton from "@/common/components/RadioButton.vue";
 import IngredientsFilling from "./BuilderIngredientsFillingSelector.vue";
 
+import { UPDATE_SAUCE_VALUE } from "@/store/mutation-types";
 import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
 
 export default {
@@ -45,23 +40,17 @@ export default {
       ITEMS_INPUT_DATA,
     };
   },
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState(["pizzas", "currentSauce"]),
+
+    sauces() {
+      return this.pizzas.sauces;
     },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    currentSauce: {
-      type: String,
-      required: true,
-    },
-    selectedIngredients: {
-      type: Object,
-      required: true,
-    },
+  },
+  methods: {
+    ...mapMutations({
+      updateSauceValue: UPDATE_SAUCE_VALUE,
+    }),
   },
 };
 </script>

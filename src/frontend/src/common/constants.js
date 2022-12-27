@@ -53,4 +53,9 @@ export const ITEMS_INPUT_DATA = {
   },
 };
 
+export const doughSpellingMap = {
+  "Толстое": "толстом",
+  "Тонкое": "тонком",
+};
+
 export const MAX_INGREDIENTS_NUMBER = 3;

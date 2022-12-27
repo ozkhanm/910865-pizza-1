@@ -8,9 +8,17 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
+import { ITEM_DROP } from "@/store/mutation-types";
+
 export default {
   name: "AppDrop",
   methods: {
+    ...mapMutations({
+      itemDrop: ITEM_DROP,
+    }),
+
     dropHandler({ dataTransfer }) {
       if (!dataTransfer) {
         return;
@@ -21,7 +29,7 @@ export default {
       if (payload) {
         const transferData = JSON.parse(payload);
 
-        this.$emit("drop", transferData);
+        this.itemDrop(transferData);
       }
     },
   },
