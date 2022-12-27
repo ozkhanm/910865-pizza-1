@@ -21,7 +21,7 @@
       type="button"
       class="counter__button counter__button--plus"
       :class="additionalPlusButtonClass"
-      :disabled="count == maxCount"
+      :disabled="count === maxCount"
       @click="plusButtonClickHandler(item)"
     >
       <span class="visually-hidden">Больше</span>
