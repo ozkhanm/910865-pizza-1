@@ -74,20 +74,20 @@ export default {
       let value = parseInt(e.target.value);
       const isInputValid = String(parseInt(e.target.value)).length === e.target.value.length;
 
+      if (!isInputValid) {
+        return;
+      }
+
       if (value < 0) {
         value = 0;
       }
 
-      if (this.maxCount !== Infinity) {
-        if (value >= 0 && value <= MAX_INGREDIENTS_NUMBER) {
-          value = parseInt(value);
-        } else if (value > MAX_INGREDIENTS_NUMBER) {
-          value = MAX_INGREDIENTS_NUMBER;
-        }
+      if (value > MAX_INGREDIENTS_NUMBER) {
+        value = MAX_INGREDIENTS_NUMBER;
       }
 
       this.inputChangeHandler({
-        count: isInputValid ? value : 0,
+        count: value,
         item: this.item,
       });
     },
