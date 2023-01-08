@@ -8,7 +8,7 @@
       >
         <p class="additional-list__description">
           <img
-            :src="require(`../../../${imageLink(item.image)}`)"
+            :src="require(`@/${imageLink(item.image)}`)"
             width="39"
             height="60"
             :alt="item.name"
@@ -18,7 +18,7 @@
 
         <div class="additional-list__wrapper">
           <ItemCounter
-            :class="`additional-list__counter`"
+            class="additional-list__counter"
             :count="count(item.name)"
             :item="item"
             :minCount="0"
@@ -50,10 +50,11 @@ export default {
     ItemCounter,
   },
   computed: {
-    ...mapState(["misc", "selectedMisc"]),
+    ...mapState("Orders", ["selectedMisc"]),
+    ...mapState("Builder", ["misc"]),
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Orders", {
       decreaseMiscCount: DECREASE_MISC_COUNT,
       increaseMiscCount: INCREASE_MISC_COUNT,
       setMiscCount: SET_MISC_COUNT,

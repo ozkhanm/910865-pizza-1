@@ -16,22 +16,35 @@
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
 
-import { ADD_TO_CART, UPDATE_TOTAL_PRICE } from "@/store/mutation-types";
+import { generateRandomNumberInRange } from "@/common/helpers";
+import { MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER } from "@/common/constants";
+
+import {
+  ADD_TO_CART,
+  UPDATE_EXISTING_PIZZA,
+  CLEAR_BUILDER_PROPERTIES,
+  SET_EDITING_PIZZA
+} from "@/store/mutation-types";
 
 export default {
   name: "PriceCounter",
   computed: {
-    ...mapState(["currentDough", "currentSize", "currentSauce", "selectedIngredients", "pizzaName"]),
-    ...mapGetters(["totalPizzaPrice"]),
+    ...mapState("Builder", ["currentDough", "currentSize", "currentSauce", "selectedIngredients", "pizzaName", "editingPizza"]),
+    ...mapState("Cart", ["cart"]),
+    ...mapGetters("Builder", ["totalPizzaPrice"]),
 
     disabled() {
       return this.totalPizzaPrice === 0 || (Object.keys(this.selectedIngredients).length === 0 || this.pizzaName.length === 0);
     },
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
+      setEditingPizza: SET_EDITING_PIZZA,
+      clearBuilderProperties: CLEAR_BUILDER_PROPERTIES,
+    }),
+    ...mapMutations("Cart", {
       addToCart: ADD_TO_CART,
-      updateTotalPrice: UPDATE_TOTAL_PRICE,
+      updateExistingPizza: UPDATE_EXISTING_PIZZA,
     }),
 
     submitButtonClickHandler() {
@@ -43,10 +56,22 @@ export default {
         name: this.pizzaName,
         price: this.totalPizzaPrice,
         amount: 1,
+        id: this.editingPizza ? this.editingPizza.id : generateRandomNumberInRange(MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER),
       };
 
-      this.addToCart(newCartItem);
-      this.updateTotalPrice();
+      if (this.editingPizza) {
+        const oldItemData = this.cart.find(it => it.id === this.editingPizza.id);
+
+        this.updateExistingPizza({
+          ...newCartItem,
+          amount: oldItemData.amount,
+        });
+        this.setEditingPizza(null);
+      } else {
+        this.addToCart(newCartItem);
+      }
+
+      this.clearBuilderProperties();
     },
   },
 };

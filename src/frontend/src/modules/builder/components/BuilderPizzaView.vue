@@ -11,7 +11,7 @@
             :key="item.id"
             class="pizza__filling"
             :class="getPizzaFillingClass(item)"
-           />
+          />
         </div>
       </AppDrop>
     </div>
@@ -36,7 +36,7 @@ export default {
     AppDrop,
   },
   computed: {
-    ...mapState(["selectedIngredients", "currentDough", "currentSauce"]),
+    ...mapState("Builder", ["selectedIngredients", "currentDough", "currentSauce"]),
 
     getCustomPizzaClass() {
       return `pizza--foundation--${doughClassMap[this.currentDough]}-${sauceMap[this.currentSauce]}`;

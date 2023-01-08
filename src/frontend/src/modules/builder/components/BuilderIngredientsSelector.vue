@@ -20,13 +20,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations } from "vuex";
 
 import RadioButton from "@/common/components/RadioButton.vue";
-import IngredientsFilling from "./BuilderIngredientsFillingSelector.vue";
+import IngredientsFilling from "@/modules/builder/components/BuilderIngredientsFillingSelector.vue";
+
+import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
 
 import { UPDATE_SAUCE_VALUE } from "@/store/mutation-types";
-import { sauceMap, ITEMS_INPUT_DATA } from "@/common/constants";
 
 export default {
   name: "IngredientsSelector",
@@ -41,14 +42,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["pizzas", "currentSauce"]),
+    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["currentSauce"]),
 
     sauces() {
       return this.pizzas.sauces;
     },
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       updateSauceValue: UPDATE_SAUCE_VALUE,
     }),
   },

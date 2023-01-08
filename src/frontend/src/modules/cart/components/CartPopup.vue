@@ -29,19 +29,18 @@
 <script>
 import { mapMutations } from "vuex";
 
-import { CHANGE_SHOW_MODAL_STATUS, RESET_STORE } from "@/store/mutation-types";
+import { RESET_STORE } from "@/store/mutation-types";
 
 export default {
-  name: "Popup",
+  name: "CartPopup",
   methods: {
     ...mapMutations({
-      showModal: CHANGE_SHOW_MODAL_STATUS,
       resetStore: RESET_STORE,
     }),
 
     popupCloseHandler() {
       this.resetStore();
-      this.$store.dispatch("init");
+      this.$store.dispatch("Builder/init");
     },
   },
 };

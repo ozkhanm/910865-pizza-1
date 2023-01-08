@@ -59,3 +59,29 @@ export const doughSpellingMap = {
 };
 
 export const MAX_INGREDIENTS_NUMBER = 3;
+
+export const SIDEBAR_MENU = {
+  ORDER_HISTORY: {
+    LABEL: "История заказов",
+    LINK: "/orders",
+  },
+  USER_DATA: {
+    LABEL: "Мои данные",
+    LINK: "/profile",
+  },
+};
+
+export const OPTIONS = {
+  GET_BY_MYSELF: "Получу сам",
+  NEW_ADDRESS: "Новый адрес",
+};
+
+export const UNAUTHORIZED_OPTIONS = ["Получу сам", "Новый адрес"];
+
+export const DELIVERY_DEFAULT_TYPE = OPTIONS.GET_BY_MYSELF;
+
+export const MAX_PIZZA_ID_NUMBER = 100000;
+
+export const MIN_PIZZA_ID_NUMBER = 0;
+
+export const addressProperySeparator = "-";

@@ -1,21 +1,16 @@
 <template>
-  <form action="test.html" method="post" class="layout-form">
+  <form
+    action="test.html"
+    method="post"
+    class="layout-form"
+  >
     <main class="content cart">
       <div class="container">
         <div class="cart__title">
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <div
-          v-if="!cart.length"
-          class="sheet cart__empty"
-        >
-          <p>В корзине нет ни одного товара</p>
-        </div>
-
-        <Popup
-          v-if="showModal"
-        />
+        <CartPopup v-if="showModal" />
 
         <ul
           v-if="cart.length"
@@ -23,10 +18,17 @@
         >
           <CartItem
             v-for="(item, id) in cart"
-            :key="id"
+            :key="id + 1011"
             :itemData="item"
           />
         </ul>
+
+        <div
+          v-else
+          class="sheet cart__empty"
+        >
+          <p>В корзине нет ни одного товара</p>
+        </div>
 
         <CartAdditional />
 
@@ -39,13 +41,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
-import CartAdditional from '../modules/builder/components/BuilderCartAdditional.vue';
-import CartFooter from '../modules/builder/components/BuilderCartFooter.vue';
-import CartForm from '../modules/builder/components/BuilderCartForm.vue';
-import CartItem from '../modules/builder/components/BuilderCartItem.vue';
-import Popup from '../common/components/Popup.vue';
+import CartAdditional from "@/modules/cart/components/CartAdditional.vue";
+import CartFooter from "@/modules/cart/components/CartFooter.vue";
+import CartForm from "@/modules/cart/components/CartForm.vue";
+import CartItem from "@/modules/cart/components/CartItem.vue";
+import CartPopup from "@/modules/cart/components/CartPopup.vue";
+
+import { DELIVERY_DEFAULT_TYPE } from "@/common/constants";
+
+import { SET_DELIVERY_TYPE } from "@/store/mutation-types";
 
 export default {
   name: "Cart",
@@ -54,10 +60,19 @@ export default {
     CartAdditional,
     CartForm,
     CartFooter,
-    Popup,
+    CartPopup,
   },
   computed: {
-    ...mapState(["cart", "showModal"]),
+    ...mapState("Cart", ["cart"]),
+    ...mapState("Orders", ["showModal"]),
+  },
+  methods: {
+    ...mapMutations("Cart", {
+      setDeliveryType: SET_DELIVERY_TYPE,
+    }),
+  },
+  beforeMount() {
+    this.setDeliveryType(DELIVERY_DEFAULT_TYPE);
   },
 };
 </script>

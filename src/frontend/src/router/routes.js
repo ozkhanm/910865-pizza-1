@@ -16,6 +16,9 @@ export default [
     path: "/orders",
     name: "Orders",
     component: () => import("@/views/Orders.vue"),
+    meta: {
+      layout: "AppLayoutSidebar",
+    },
   },
   {
     path: "/sign-in",
@@ -26,8 +29,11 @@ export default [
     },
   },
   {
-    path: "/user-data",
+    path: "/profile",
     name: "Profile",
     component: () => import("@/views/Profile.vue"),
+    meta: {
+      layout: "AppLayoutSidebar",
+    },
   },
 ];

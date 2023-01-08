@@ -15,7 +15,7 @@ import { ITEM_DROP } from "@/store/mutation-types";
 export default {
   name: "AppDrop",
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       itemDrop: ITEM_DROP,
     }),
 

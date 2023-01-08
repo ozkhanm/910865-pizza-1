@@ -20,10 +20,10 @@ import { UPDATE_NAME } from "@/store/mutation-types";
 export default {
   name: "PizzaName",
   computed: {
-    ...mapState(["pizzaName"]),
+    ...mapState("Builder", ["pizzaName"]),
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       updateName: UPDATE_NAME,
     }),
 

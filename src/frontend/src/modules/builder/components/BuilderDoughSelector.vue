@@ -15,12 +15,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations } from "vuex";
 
 import RadioButton from "@/common/components/RadioButton.vue";
 
-import { UPDATE_DOUGH_VALUE } from "@/store/mutation-types";
 import { doughMap, ITEMS_INPUT_DATA } from "@/common/constants";
+
+import { UPDATE_DOUGH_VALUE } from "@/store/mutation-types";
 
 export default {
   name: "DoughSelector",
@@ -34,14 +35,15 @@ export default {
     RadioButton,
   },
   computed: {
-    ...mapState(["pizzas", "currentDough"]),
+    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["currentDough"]),
 
     dough() {
       return this.pizzas.dough;
     },
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       updateDoughValue: UPDATE_DOUGH_VALUE,
     }),
   },

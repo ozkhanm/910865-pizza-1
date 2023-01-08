@@ -11,9 +11,7 @@
         :key="ingredient.id"
         class="ingredients__item"
       >
-        <AppDrag
-          :transferData="ingredient"
-        >
+        <AppDrag :transferData="ingredient">
           <SelectorItem
             class="filling"
             :class="`filling--${ingredientsMap[ingredient.name]}`"
@@ -22,7 +20,7 @@
         </AppDrag>
 
         <ItemCounter
-          :class="`counter--orange ingredients__counter`"
+          class="counter--orange ingredients__counter"
           :count="count(ingredient.name)"
           :item="ingredient"
           :minCount="0"
@@ -37,14 +35,15 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations } from "vuex";
 
 import SelectorItem from "@/common/components/SelectorItem.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import AppDrag from "@/common/components/AppDrag.vue";
 
-import { DECREASE_INGREDIENT_COUNT, INCREASE_INGREDIENT_COUNT, SET_INGREDIENT_COUNT } from "@/store/mutation-types";
 import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
+
+import { DECREASE_INGREDIENT_COUNT, INCREASE_INGREDIENT_COUNT, SET_INGREDIENT_COUNT } from "@/store/mutation-types";
 
 export default {
   name: "IngredientsFillingSelector",
@@ -61,14 +60,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["selectedIngredients", "pizzas"]),
+    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["selectedIngredients"]),
 
     ingredients() {
       return this.pizzas.ingredients;
     },
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       decreaseIngredientCount: DECREASE_INGREDIENT_COUNT,
       increaseIngredientCount: INCREASE_INGREDIENT_COUNT,
       setCount: SET_INGREDIENT_COUNT,

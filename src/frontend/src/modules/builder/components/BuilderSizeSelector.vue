@@ -15,12 +15,13 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex';
+import { mapState, mapMutations } from "vuex";
 
 import RadioButton from "@/common/components/RadioButton.vue";
 
-import { UPDATE_SIZE_VALUE } from "@/store/mutation-types";
 import { sizeMap, ITEMS_INPUT_DATA } from "@/common/constants";
+
+import { UPDATE_SIZE_VALUE } from "@/store/mutation-types";
 
 export default {
   name: "SizeSelector",
@@ -34,14 +35,15 @@ export default {
     };
   },
   computed: {
-    ...mapState(["pizzas", "currentSize"]),
+    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["currentSize"]),
 
     sizes() {
       return this.pizzas.sizes;
     },
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations("Builder", {
       updateSizeValue: UPDATE_SIZE_VALUE,
     }),
   },
