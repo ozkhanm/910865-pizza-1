@@ -1,7 +1,7 @@
 <template>
   <li>
     <img
-      :src="require(`@/${imageLink(image)}`)"
+      :src="imageLink(image)"
       width="20"
       height="30"
       :alt="name"
@@ -41,7 +41,9 @@ export default {
   },
   methods: {
     imageLink(link) {
-      return `assets/${link.split("/").slice(2).join("/")}`;
+      const filename = link.split("/").slice(3).join("/");
+
+      return require(`@/assets/img/` + `${filename}`);
     },
   },
 };

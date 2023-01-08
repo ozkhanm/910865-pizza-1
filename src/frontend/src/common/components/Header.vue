@@ -36,11 +36,11 @@
         <picture>
           <source
             type="image/webp"
-            :srcset="require(`@/${imageWithExtension(user.avatar, '.webp')}`) + ' 1x, ' + require(`@/${imageWithExtension(user.avatar, '@2x.webp')}`) + ' 2x'"
+            :srcset="imageWithExtension(user.avatar, '.webp') + ' 1x,' + imageWithExtension(user.avatar, '@2x.webp') + ' 2x'"
           >
           <img
-            :src="require(`@/${imageLink(user.avatar)}`)"
-            :srcset="require(`@/${imageWithExtension(user.avatar, '@2x.jpg')}`)"
+            :src="imageLink(user.avatar)"
+            :srcset="imageWithExtension(user.avatar, '@2x.jpg')"
             :alt="user.name"
             width="32"
             height="32"
@@ -87,10 +87,15 @@ export default {
     }),
 
     imageLink(link) {
-      return `assets/${link.split("/").slice(2).join("/")}`;
+      const filename = link.split("/").slice(4).join("/");
+
+      return require(`@/assets/img/users/` + `${filename}`);
     },
+
     imageWithExtension(link, extension) {
-      return `assets/${link.split("/").slice(2).join("/")}`.split(".")[0] + `${extension}`;
+      const filename = link.split("/").slice(4).join("/").split(".")[0];
+
+      return require(`@/assets/img/users/` + `${filename}` + extension);
     },
     profileIconClickHandler() {
       this.changeActiveSidebarMenu(SIDEBAR_MENU.USER_DATA.LABEL);

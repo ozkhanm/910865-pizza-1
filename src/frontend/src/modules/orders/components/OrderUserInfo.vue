@@ -3,11 +3,11 @@
     <picture>
       <source
         type="image/webp"
-        :srcset="require(`@/${imageWithExtension(user.avatar, '@2x.webp')}`) + ' 1x, ' + require(`@/${imageWithExtension(user.avatar, '@4x.webp')}`) + ' 2x'"
+        :srcset="imageWithExtension(user.avatar, '@2x.webp') + ' 1x,' + imageWithExtension(user.avatar, '@4x.webp') + ' 2x'"
       >
       <img
-        :src="require(`@/${imageWithExtension(user.avatar, '@2x.jpg')}`)"
-        :srcset="require(`@/${imageWithExtension(user.avatar, '@4x.jpg')}`)"
+        :src="imageWithExtension(user.avatar, '@2x.jpg')"
+        :srcset="imageWithExtension(user.avatar, '@4x.jpg')"
         :alt="user.name"
         width="72"
         height="72"
@@ -30,7 +30,9 @@ export default {
   },
   methods: {
     imageWithExtension(link, extension) {
-      return `assets/${link.split("/").slice(2).join("/")}`.split(".")[0] + `${extension}`;
+      const filename = link.split("/").slice(4).join("/").split(".")[0];
+
+      return require(`@/assets/img/users/` + `${filename}` + extension);
     },
   },
 };

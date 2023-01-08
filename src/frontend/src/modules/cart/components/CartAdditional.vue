@@ -8,7 +8,7 @@
       >
         <p class="additional-list__description">
           <img
-            :src="require(`@/${imageLink(item.image)}`)"
+            :src="imageLink(item.image)"
             width="39"
             height="60"
             :alt="item.name"
@@ -61,7 +61,9 @@ export default {
     }),
 
     imageLink(link) {
-      return `assets/${link.split("/").slice(2).join("/")}`;
+      const filename = link.split("/").slice(3).join("/");
+
+      return require(`@/assets/img/` + `${filename}`);
     },
     count(name) {
       return this.selectedMisc[name]?.amount || 0;
