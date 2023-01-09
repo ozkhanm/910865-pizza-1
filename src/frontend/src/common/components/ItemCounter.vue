@@ -30,8 +30,6 @@
 </template>
 
 <script>
-import { MAX_INGREDIENTS_NUMBER } from "@/common/constants";
-
 export default {
   name: "ItemCounter",
   props: {
@@ -90,10 +88,6 @@ export default {
 
       if (value < 0) {
         value = 0;
-      }
-
-      if (value > MAX_INGREDIENTS_NUMBER) {
-        value = MAX_INGREDIENTS_NUMBER;
       }
 
       this.inputChangeHandler({

@@ -21,7 +21,7 @@
 
         <ItemCounter
           class="counter--orange ingredients__counter"
-          :count="count(ingredient.name)"
+          :count="$itemsCounter(selectedIngredients, ingredient.name)"
           :item="ingredient"
           :minCount="0"
           :maxCount="MAX_INGREDIENTS_NUMBER"
@@ -41,6 +41,8 @@ import SelectorItem from "@/common/components/SelectorItem.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import AppDrag from "@/common/components/AppDrag.vue";
 
+import { itemsCounter } from "@/common/mixins";
+
 import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 
 import { DECREASE_INGREDIENT_COUNT, INCREASE_INGREDIENT_COUNT, SET_INGREDIENT_COUNT } from "@/store/mutation-types";
@@ -52,6 +54,7 @@ export default {
     ItemCounter,
     AppDrag,
   },
+  mixins: [itemsCounter],
   data() {
     return {
       ingredientsMap,
@@ -73,10 +76,6 @@ export default {
       increaseIngredientCount: INCREASE_INGREDIENT_COUNT,
       setCount: SET_INGREDIENT_COUNT,
     }),
-
-    count(name) {
-      return this.selectedIngredients[name]?.amount || 0;
-    },
   },
 };
 </script>

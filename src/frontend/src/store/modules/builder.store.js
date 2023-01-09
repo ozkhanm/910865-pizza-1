@@ -109,6 +109,10 @@ const mutations = {
     const selectedIngredients = { ...state.selectedIngredients };
     const ingredientName = item.name;
 
+    if (count > MAX_INGREDIENTS_NUMBER) {
+      count = MAX_INGREDIENTS_NUMBER;
+    }
+
     if (count !== 0) {
       selectedIngredients[ingredientName] = state.pizzas.ingredients.find(it => it.name === ingredientName);
       selectedIngredients[ingredientName].amount = count;

@@ -19,7 +19,7 @@
         <div class="additional-list__wrapper">
           <ItemCounter
             class="additional-list__counter"
-            :count="count(item.name)"
+            :count="$itemsCounter(selectedMisc, item.name)"
             :item="item"
             :minCount="0"
             :maxCount="Infinity"
@@ -42,7 +42,7 @@ import { mapState, mapMutations } from "vuex";
 
 import ItemCounter from "@/common/components/ItemCounter.vue";
 
-import { imageLink } from "@/common/mixins";
+import { imageLink, itemsCounter } from "@/common/mixins";
 
 import { DECREASE_MISC_COUNT, INCREASE_MISC_COUNT, SET_MISC_COUNT } from "@/store/mutation-types";
 
@@ -51,7 +51,7 @@ export default {
   components: {
     ItemCounter,
   },
-  mixins: [imageLink],
+  mixins: [imageLink, itemsCounter],
   computed: {
     ...mapState("Orders", ["selectedMisc"]),
     ...mapState("Builder", ["misc"]),
@@ -62,10 +62,6 @@ export default {
       increaseMiscCount: INCREASE_MISC_COUNT,
       setMiscCount: SET_MISC_COUNT,
     }),
-
-    count(name) {
-      return this.selectedMisc[name]?.amount || 0;
-    },
   },
 };
 </script>

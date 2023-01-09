@@ -342,7 +342,7 @@ const mutations = {
     const miscName = item.name;
 
     if (count !== 0) {
-      selectedMisc[miscName] = state.misc.find(it => it.name === miscName);
+      selectedMisc[miscName] = this.state["Builder"].misc.find(it => it.name === miscName);
       selectedMisc[miscName].amount = count;
     } else {
       delete selectedMisc[miscName];
