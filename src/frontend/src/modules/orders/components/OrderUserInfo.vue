@@ -3,11 +3,11 @@
     <picture>
       <source
         type="image/webp"
-        :srcset="imageWithExtension(user.avatar, '@2x.webp') + ' 1x,' + imageWithExtension(user.avatar, '@4x.webp') + ' 2x'"
+        :srcset="$imageWithExtensionLink(user.avatar, '@2x.webp') + ' 1x,' + $imageWithExtensionLink(user.avatar, '@4x.webp') + ' 2x'"
       >
       <img
-        :src="imageWithExtension(user.avatar, '@2x.jpg')"
-        :srcset="imageWithExtension(user.avatar, '@4x.jpg')"
+        :src="$imageWithExtensionLink(user.avatar, '@2x.jpg')"
+        :srcset="$imageWithExtensionLink(user.avatar, '@4x.jpg')"
         :alt="user.name"
         width="72"
         height="72"
@@ -23,17 +23,13 @@
 <script>
 import { mapState } from "vuex";
 
+import { imageWithExtensionLink } from "@/common/mixins";
+
 export default {
   name: "OrderUserInfo",
+  mixins: [imageWithExtensionLink],
   computed: {
     ...mapState("Auth", ["user"]),
-  },
-  methods: {
-    imageWithExtension(link, extension) {
-      const filename = link.split("/").slice(4).join("/").split(".")[0];
-
-      return require(`@/assets/img/users/` + `${filename}` + extension);
-    },
   },
 };
 </script>

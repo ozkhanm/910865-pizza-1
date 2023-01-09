@@ -36,11 +36,11 @@
         <picture>
           <source
             type="image/webp"
-            :srcset="imageWithExtension(user.avatar, '.webp') + ' 1x,' + imageWithExtension(user.avatar, '@2x.webp') + ' 2x'"
+            :srcset="$imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + $imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
           >
           <img
-            :src="imageLink(user.avatar)"
-            :srcset="imageWithExtension(user.avatar, '@2x.jpg')"
+            :src="$imageLink(user.avatar)"
+            :srcset="$imageWithExtensionLink(user.avatar, '@2x.jpg')"
             :alt="user.name"
             width="32"
             height="32"
@@ -65,6 +65,8 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import AppLogo from "@/common/components/AppLogo.vue";
 
+import { imageLink, imageWithExtensionLink } from "@/common/mixins";
+
 import { SIDEBAR_MENU } from "@/common/constants"
 
 import { CHANGE_ACTIVE_SIDEBAR_MENU, CHANGE_AUTH_STATUS } from "@/store/mutation-types";
@@ -74,6 +76,7 @@ export default {
   components: {
     AppLogo,
   },
+  mixins: [imageLink, imageWithExtensionLink],
   computed: {
     ...mapState("Auth", ["user", "isAuthorized"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
@@ -86,17 +89,6 @@ export default {
       changeAuthStatus: CHANGE_AUTH_STATUS,
     }),
 
-    imageLink(link) {
-      const filename = link.split("/").slice(4).join("/");
-
-      return require(`@/assets/img/users/` + `${filename}`);
-    },
-
-    imageWithExtension(link, extension) {
-      const filename = link.split("/").slice(4).join("/").split(".")[0];
-
-      return require(`@/assets/img/users/` + `${filename}` + extension);
-    },
     profileIconClickHandler() {
       this.changeActiveSidebarMenu(SIDEBAR_MENU.USER_DATA.LABEL);
     },

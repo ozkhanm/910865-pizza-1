@@ -1,7 +1,7 @@
 <template>
   <li>
     <img
-      :src="imageLink(image)"
+      :src="$imageLink(image)"
       width="20"
       height="30"
       :alt="name"
@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import { imageLink } from "@/common/mixins";
+
 export default {
   name: "OrderItemAdditional",
+  mixins: [imageLink],
   props: {
     name: {
       type: String,
@@ -37,13 +40,6 @@ export default {
   computed: {
     priceText() {
       return this.amount > 1 ? `${this.amount}х${this.price}` : this.price;
-    },
-  },
-  methods: {
-    imageLink(link) {
-      const filename = link.split("/").slice(3).join("/");
-
-      return require(`@/assets/img/` + `${filename}`);
     },
   },
 };
