@@ -13,5 +13,3 @@ export const getSauceText = sauce => {
 export const getIngredientsText = ingredients => {
   return `Начинка: ${ Object.keys(ingredients).map(it => it.toLowerCase()).join(", ")}`;
 };
-
-export const generateRandomNumberInRange = (max, min) => Math.floor(Math.random() * (max - min + 1)) + min;
