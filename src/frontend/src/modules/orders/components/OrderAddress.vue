@@ -36,55 +36,15 @@
 
         <div class="address-form__wrapper">
           <FormInput
-            class="address-form__input"
-            text="Название адреса*"
-            inputType="text"
-            inputName="addr-name"
-            placeholder="Введите название адреса"
-            :required="true"
-            :value="name"
-            :inputChangeHandler="inputChangeHandler"
-          />
-
-          <FormInput
-            class="address-form__input address-form__input--size--normal"
-            text="Улица*"
-            inputType="text"
-            inputName="addr-street"
-            placeholder="Введите название улицы"
-            :required="true"
-            :value="street"
-            :inputChangeHandler="inputChangeHandler"
-          />
-
-          <FormInput
-            class="address-form__input address-form__input--size--small"
-            text="Дом*"
-            inputType="text"
-            inputName="addr-house"
-            placeholder="Введите номер дома"
-            :required="true"
-            :value="house"
-            :inputChangeHandler="inputChangeHandler"
-          />
-
-          <FormInput
-            class="address-form__input address-form__input--size--small"
-            text="Квартира"
-            inputType="text"
-            inputName="addr-apartment"
-            placeholder="Введите № квартиры"
-            :value="apartment"
-            :inputChangeHandler="inputChangeHandler"
-          />
-
-          <FormInput
-            class="address-form__input"
-            text="Комментарий"
-            inputType="text"
-            inputName="addr-comment"
-            placeholder="Введите комментарий"
-            :value="comment"
+            v-for="(formData, dataId) in FORM_INPUT_DATA"
+            :key="dataId"
+            :class="`address-form__input ${classSize(formData.size)}`"
+            :text="formData.text"
+            :inputType="formData.inputType"
+            :inputName="`addr-${formData.inputName}`"
+            :placeholder="formData.placeholder"
+            :required="formData.required"
+            :value="$props[formData.inputName]"
             :inputChangeHandler="inputChangeHandler"
           />
         </div>
@@ -114,11 +74,18 @@ import { mapState } from "vuex";
 import FormInput from "@/common/components/FormInput.vue";
 import SubmitButton from "@/common/components/SubmitButton.vue";
 
+import { FORM_INPUT_DATA } from "@/common/constants";
+
 export default {
   name: "OrderAddress",
   components: {
     FormInput,
     SubmitButton,
+  },
+  data() {
+    return {
+      FORM_INPUT_DATA,
+    };
   },
   props: {
     name: {
@@ -171,6 +138,11 @@ export default {
 
     address() {
       return `${this.street}, д. ${this.house}, кв. ${this.apartment}`;
+    },
+  },
+  methods: {
+    classSize(size) {
+      return size.length !== 0 ? `address-form__input--size--${size}` : "";
     },
   },
 };

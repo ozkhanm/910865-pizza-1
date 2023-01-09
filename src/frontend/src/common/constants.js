@@ -85,3 +85,46 @@ export const MAX_PIZZA_ID_NUMBER = 100000;
 export const MIN_PIZZA_ID_NUMBER = 0;
 
 export const addressProperySeparator = "-";
+
+export const FORM_INPUT_DATA = [
+  {
+    size: "",
+    text: "Название адреса*",
+    inputType: "text",
+    inputName: "name",
+    placeholder: "Введите название адреса",
+    required: true,
+  },
+  {
+    size: "normal",
+    text: "Улица*",
+    inputType: "text",
+    inputName: "street",
+    placeholder: "Введите название улицы",
+    required: true,
+  },
+  {
+    size: "small",
+    text: "Дом*",
+    inputType: "text",
+    inputName: "house",
+    placeholder: "Введите номер дома",
+    required: true,
+  },
+  {
+    size: "small",
+    text: "Квартира",
+    inputType: "text",
+    inputName: "apartment",
+    placeholder: "Введите № квартиры",
+    required: false,
+  },
+  {
+    size: "",
+    text: "Комментарий",
+    inputType: "text",
+    inputName: "comment",
+    placeholder: "Введите комментарий",
+    required: false,
+  },
+];
