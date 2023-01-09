@@ -9,15 +9,15 @@ import { resetState as resetOrdersState } from "@/store/modules/orders.store";
 
 Vue.use(Vuex);
 
-const resetState = () => ({
+const resetState = prevState => ({
   "Builder": resetBuilderState(),
   "Cart": resetCartState(),
-  "Orders": resetOrdersState(),
+  "Orders": resetOrdersState(prevState),
 });
 
 const mutations = {
   [RESET_STORE](state) {
-    Object.assign(state, resetState());
+    Object.assign(state, resetState(state));
   },
 };
 
