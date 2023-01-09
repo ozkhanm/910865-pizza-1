@@ -86,7 +86,7 @@ export const MIN_PIZZA_ID_NUMBER = 0;
 
 export const addressProperySeparator = "-";
 
-export const FORM_INPUT_DATA = [
+export const ADDRESS_FORM_INPUT_DATA = [
   {
     size: "",
     text: "Название адреса*",
@@ -125,6 +125,52 @@ export const FORM_INPUT_DATA = [
     inputType: "text",
     inputName: "comment",
     placeholder: "Введите комментарий",
+    required: false,
+  },
+];
+
+export const AUTH_FORM_INPUT_DATA = [
+  {
+    size: "",
+    text: "E-mail",
+    inputType: "email",
+    inputName: "email",
+    placeholder: "example@mail.ru",
+    required: true,
+  },
+  {
+    size: "",
+    text: "Пароль",
+    inputType: "password",
+    inputName: "pass",
+    placeholder: "***********",
+    required: true,
+  },
+];
+
+export const CART_ADDRESS_FORM_INPUT_DATA = [
+  {
+    size: "",
+    text: "Улица*",
+    inputType: "text",
+    inputName: "street",
+    placeholder: "Введите название улицы",
+    required: true,
+  },
+  {
+    size: "small",
+    text: "Дом*",
+    inputType: "text",
+    inputName: "house",
+    placeholder: "Введите номер дома",
+    required: true,
+  },
+  {
+    size: "small",
+    text: "Квартира",
+    inputType: "text",
+    inputName: "apartment",
+    placeholder: "Введите № квартиры",
     required: false,
   },
 ];

@@ -4,22 +4,15 @@
     method="post"
   >
     <FormInput
+      v-for="(formData, dataId) in AUTH_FORM_INPUT_DATA"
+      :key="dataId"
       class="sign-form__input"
-      text="E-mail"
-      inputType="email"
-      inputName="email"
-      placeholder="example@mail.ru"
-      :value="email"
-      :inputChangeHandler="inputChangeHandler"
-    />
-
-    <FormInput
-      class="sign-form__input"
-      text="Пароль"
-      inputType="password"
-      inputName="pass"
-      placeholder="***********"
-      :value="pass"
+      :text="formData.text"
+      :inputType="formData.inputType"
+      :inputName="formData.inputName"
+      :placeholder="formData.placeholder"
+      :required="formData.required"
+      :value="$data[formData.inputName]"
       :inputChangeHandler="inputChangeHandler"
     />
 
@@ -36,6 +29,8 @@ import { mapState, mapMutations } from "vuex";
 import FormInput from "@/common/components/FormInput.vue";
 import SubmitButton from "@/common/components/SubmitButton.vue";
 
+import { AUTH_FORM_INPUT_DATA } from "@/common/constants";
+
 import { CHANGE_AUTH_STATUS } from "@/store/mutation-types";
 
 export default {
@@ -44,6 +39,7 @@ export default {
     return {
       email: "",
       pass: "",
+      AUTH_FORM_INPUT_DATA,
     };
   },
   components: {

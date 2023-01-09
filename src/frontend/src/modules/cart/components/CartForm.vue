@@ -36,33 +36,16 @@
         <span class="cart-form__label">{{ cartFormAddressLabel }}</span>
 
         <FormInput
-          class="cart-form__input"
-          text="Улица*"
-          inputType="text"
-          inputName="street"
-          :value="isDefaultOption ? '' : currentDeliveryAddress.street"
+          v-for="(formData, dataId) in CART_ADDRESS_FORM_INPUT_DATA"
+          :key="dataId"
+          :class="`cart-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
+          :text="formData.text"
+          :inputType="formData.inputType"
+          :inputName="formData.inputName"
+          :required="formData.required"
+          :value="isDefaultOption ? '' : currentDeliveryAddress[inputName]"
           :disabled="!isDefaultOption"
           :inputChangeHandler="updateStreetValue"
-        />
-
-        <FormInput
-          class="cart-form__input cart-form__input--small"
-          text="Дом*"
-          inputType="text"
-          inputName="house"
-          :value="isDefaultOption ? '' : currentDeliveryAddress.house"
-          :disabled="!isDefaultOption"
-          :inputChangeHandler="updateHouseValue"
-        />
-
-        <FormInput
-          class="cart-form__input cart-form__input--small"
-          text="Квартира"
-          inputType="text"
-          inputName="apartment"
-          :value="isDefaultOption ? '' : currentDeliveryAddress.apartment"
-          :disabled="!isDefaultOption"
-          :inputChangeHandler="updateApartmentValue"
         />
       </div>
     </div>
@@ -74,7 +57,9 @@ import { mapState, mapMutations } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
 
-import { UNAUTHORIZED_OPTIONS, OPTIONS } from "@/common/constants";
+import { formInputClassSize } from "@/common/mixins";
+
+import { UNAUTHORIZED_OPTIONS, OPTIONS, CART_ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
 import {
   SET_DELIVERY_TYPE,
@@ -89,9 +74,12 @@ export default {
   components: {
     FormInput,
   },
+  mixins: [formInputClassSize],
   data() {
     return {
       OPTIONS,
+      CART_ADDRESS_FORM_INPUT_DATA,
+      additionalSizeClass: "cart-form__input",
     };
   },
   computed: {

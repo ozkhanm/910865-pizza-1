@@ -36,9 +36,9 @@
 
         <div class="address-form__wrapper">
           <FormInput
-            v-for="(formData, dataId) in FORM_INPUT_DATA"
+            v-for="(formData, dataId) in ADDRESS_FORM_INPUT_DATA"
             :key="dataId"
-            :class="`address-form__input ${classSize(formData.size)}`"
+            :class="`address-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
             :text="formData.text"
             :inputType="formData.inputType"
             :inputName="`addr-${formData.inputName}`"
@@ -74,7 +74,9 @@ import { mapState } from "vuex";
 import FormInput from "@/common/components/FormInput.vue";
 import SubmitButton from "@/common/components/SubmitButton.vue";
 
-import { FORM_INPUT_DATA } from "@/common/constants";
+import { formInputClassSize } from "@/common/mixins";
+
+import { ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
 export default {
   name: "OrderAddress",
@@ -82,9 +84,11 @@ export default {
     FormInput,
     SubmitButton,
   },
+  mixins: [formInputClassSize],
   data() {
     return {
-      FORM_INPUT_DATA,
+      ADDRESS_FORM_INPUT_DATA,
+      additionalSizeClass: "address-form__input--size",
     };
   },
   props: {
@@ -138,11 +142,6 @@ export default {
 
     address() {
       return `${this.street}, д. ${this.house}, кв. ${this.apartment}`;
-    },
-  },
-  methods: {
-    classSize(size) {
-      return size.length !== 0 ? `address-form__input--size--${size}` : "";
     },
   },
 };
