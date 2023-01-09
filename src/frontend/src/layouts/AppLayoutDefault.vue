@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="default-layout-container">
     <Header />
     <slot />
   </div>
@@ -17,5 +17,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.default-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 </style>

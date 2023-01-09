@@ -1,25 +1,28 @@
 <template>
-  <div class="counter counter--orange ingredients__counter">
+  <div class="counter">
     <button
       type="button"
       class="counter__button counter__button--minus"
       :disabled="count === minCount"
-      @click="minusButtonClickHandler"
+      @click="minusButtonClickHandler(item)"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
+
     <input
       type="text"
       name="counter"
       class="counter__input"
-      :value="count"
+      :value="countValue"
       @change="counterChangeHandler"
     >
+
     <button
       type="button"
       class="counter__button counter__button--plus"
+      :class="additionalPlusButtonClass"
       :disabled="count === maxCount"
-      @click="plusButtonClickHandler"
+      @click="plusButtonClickHandler(item)"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -42,22 +45,56 @@ export default {
       type: Number,
       required: true,
     },
+    plusButtonClickHandler: {
+      type: Function,
+      required: true,
+    },
+    minusButtonClickHandler: {
+      type: Function,
+      required: true,
+    },
+    item: {
+      type: Object,
+      required: true,
+    },
+    inputChangeHandler: {
+      type: Function,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      refreshKey: 0,
+    };
+  },
+  computed: {
+    additionalPlusButtonClass() {
+      return this.$router.currentRoute.name === "Index" ? null : "counter__button--orange";
+    },
+    countValue() {
+      this.refreshKey;
+
+      return this.count;
+    },
   },
   methods: {
     counterChangeHandler(e) {
       let value = parseInt(e.target.value);
+      const isInputValid = String(parseInt(e.target.value)).length === e.target.value.length;
 
-      if  (isNaN(value)) {
-        value = this.count;
+      if (!isInputValid) {
+        return;
       }
 
-      this.$emit("blur", value);
-    },
-    minusButtonClickHandler() {
-      this.$emit("minusButtonClick");
-    },
-    plusButtonClickHandler() {
-      this.$emit("plusButtonClick");
+      if (value < 0) {
+        value = 0;
+      }
+
+      this.inputChangeHandler({
+        count: value,
+        item: this.item,
+      });
+      this.refreshKey++;
     },
   },
 };

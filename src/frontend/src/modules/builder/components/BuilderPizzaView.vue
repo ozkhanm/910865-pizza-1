@@ -4,16 +4,14 @@
       class="pizza"
       :class="getCustomPizzaClass"
     >
-      <AppDrop
-        @drop="itemDropHandler"
-      >
+      <AppDrop>
         <div class="pizza__wrapper">
           <div
             v-for="item in selectedIngredients"
             :key="item.id"
             class="pizza__filling"
             :class="getPizzaFillingClass(item)"
-           />
+          />
         </div>
       </AppDrop>
     </div>
@@ -21,9 +19,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import AppDrop from "@/common/components/AppDrop.vue";
 
-import { ingredientsMap, MAX_INGREDIENTS_NUMBER, sauceMap, doughClassMap } from "@/common/constants";
+import { ingredientsMap, sauceMap, doughClassMap } from "@/common/constants";
 
 export default {
   name: "PizzaView",
@@ -35,21 +35,9 @@ export default {
   components: {
     AppDrop,
   },
-  props: {
-    selectedIngredients: {
-      type: Object,
-      required: true,
-    },
-    currentDough: {
-      type: String,
-      required: true,
-    },
-    currentSauce: {
-      type: String,
-      required: true,
-    },
-  },
   computed: {
+    ...mapState("Builder", ["selectedIngredients", "currentDough", "currentSauce"]),
+
     getCustomPizzaClass() {
       return `pizza--foundation--${doughClassMap[this.currentDough]}-${sauceMap[this.currentSauce]}`;
     },
@@ -65,22 +53,6 @@ export default {
       }
 
       return `pizza__filling--${ingredientsMap[item.name]} ${additionalIngredientsClass}`;
-    },
-    itemDropHandler(item) {
-      const ingredients = { ...this.selectedIngredients };
-
-      if (ingredients[item.name]) {
-        if (ingredients[item.name].amount !== MAX_INGREDIENTS_NUMBER) {
-          ingredients[item.name].amount++;
-          this.$emit("change", ingredients);
-        }
-      } else {
-        ingredients[item.name] = {
-          ...item,
-          amount: 1,
-        };
-        this.$emit("change", ingredients);
-      }
     },
   },
 };

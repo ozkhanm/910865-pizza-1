@@ -1,28 +1,34 @@
 <template>
   <label class="input">
     <span class="visually-hidden">Название пиццы</span>
+
     <input
       type="text"
       name="pizza_name"
       placeholder="Введите название пиццы"
-      :value="name"
+      :value="pizzaName"
       @input="nameInputChangeHandler"
     >
   </label>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+
+import { UPDATE_NAME } from "@/store/mutation-types";
+
 export default {
   name: "PizzaName",
-  props: {
-    name: {
-      type: String,
-      required: true,
-    },
+  computed: {
+    ...mapState("Builder", ["pizzaName"]),
   },
   methods: {
+    ...mapMutations("Builder", {
+      updateName: UPDATE_NAME,
+    }),
+
     nameInputChangeHandler(e) {
-      this.$emit("changeName", e.target.value);
+      this.updateName(e.target.value);
     },
   },
 };

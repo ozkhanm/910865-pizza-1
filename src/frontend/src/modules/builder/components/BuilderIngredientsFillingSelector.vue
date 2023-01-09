@@ -11,9 +11,7 @@
         :key="ingredient.id"
         class="ingredients__item"
       >
-        <AppDrag
-          :transferData="ingredient"
-        >
+        <AppDrag :transferData="ingredient">
           <SelectorItem
             class="filling"
             :class="`filling--${ingredientsMap[ingredient.name]}`"
@@ -22,25 +20,32 @@
         </AppDrag>
 
         <ItemCounter
-          :count="count(ingredient.name)"
+          class="counter--orange ingredients__counter"
+          :count="$itemsCounter(selectedIngredients, ingredient.name)"
+          :item="ingredient"
           :minCount="0"
           :maxCount="MAX_INGREDIENTS_NUMBER"
-          @blur="$emit('blur', $event, ingredient.name)"
-          @plusButtonClick="$emit('plusButtonClick', ingredient)"
-          @minusButtonClick="$emit('minusButtonClick', ingredient)"
+          :inputChangeHandler="setCount"
+          :minusButtonClickHandler="decreaseIngredientCount"
+          :plusButtonClickHandler="increaseIngredientCount"
         />
       </li>
     </ul>
-
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
+
 import SelectorItem from "@/common/components/SelectorItem.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import AppDrag from "@/common/components/AppDrag.vue";
 
+import { itemsCounter } from "@/common/mixins";
+
 import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
+
+import { DECREASE_INGREDIENT_COUNT, INCREASE_INGREDIENT_COUNT, SET_INGREDIENT_COUNT } from "@/store/mutation-types";
 
 export default {
   name: "IngredientsFillingSelector",
@@ -49,6 +54,7 @@ export default {
     ItemCounter,
     AppDrag,
   },
+  mixins: [itemsCounter],
   data() {
     return {
       ingredientsMap,
@@ -56,20 +62,20 @@ export default {
       MAX_INGREDIENTS_NUMBER,
     };
   },
-  props: {
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    selectedIngredients: {
-      type: Object,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["pizzas"]),
+    ...mapState("Builder", ["selectedIngredients"]),
+
+    ingredients() {
+      return this.pizzas.ingredients;
     },
   },
   methods: {
-    count(name) {
-      return this.selectedIngredients[name]?.amount;
-    },
+    ...mapMutations("Builder", {
+      decreaseIngredientCount: DECREASE_INGREDIENT_COUNT,
+      increaseIngredientCount: INCREASE_INGREDIENT_COUNT,
+      setCount: SET_INGREDIENT_COUNT,
+    }),
   },
 };
 </script>
