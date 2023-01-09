@@ -13,7 +13,7 @@
       type="text"
       name="counter"
       class="counter__input"
-      :value="count"
+      :value="countValue"
       @change="counterChangeHandler"
     >
 
@@ -64,9 +64,19 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      refreshKey: 0,
+    };
+  },
   computed: {
     additionalPlusButtonClass() {
       return this.$router.currentRoute.name === "Index" ? null : "counter__button--orange";
+    },
+    countValue() {
+      this.refreshKey;
+
+      return this.count;
     },
   },
   methods: {
@@ -90,6 +100,7 @@ export default {
         count: value,
         item: this.item,
       });
+      this.refreshKey++;
     },
   },
 };
