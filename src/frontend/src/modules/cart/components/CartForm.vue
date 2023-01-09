@@ -43,7 +43,7 @@
           :inputType="formData.inputType"
           :inputName="formData.inputName"
           :required="formData.required"
-          :value="isDefaultOption ? '' : currentDeliveryAddress[inputName]"
+          :value="isDefaultOption ? '' : currentDeliveryAddress[formData.inputName]"
           :disabled="!isDefaultOption"
           :inputChangeHandler="updateStreetValue"
         />
