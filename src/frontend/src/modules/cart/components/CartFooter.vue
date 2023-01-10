@@ -43,7 +43,7 @@ export default {
     ...mapState("Cart", ["cart"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
     ...mapState("Orders", ["selectedMisc", "userOrders"]),
-    ...mapState("Auth", ["isAuthorized"]),
+    ...mapState("Auth", ["isAuthenticated"]),
 
     buttonDisabled() {
       return this.cart.length === 0 || this.totalOrderPrice === 0;
@@ -58,7 +58,7 @@ export default {
     formSubmitHandler() {
       this.changeShowModalStatus(true);
 
-      if (this.isAuthorized) {
+      if (this.isAuthenticated) {
         const order = {
           id: parseInt(uniqueId()) + 1,
           orderNumber: parseInt(uniqueId()),

@@ -83,12 +83,12 @@ export default {
     };
   },
   computed: {
-    ...mapState("Auth", ["isAuthorized"]),
+    ...mapState("Auth", ["isAuthenticated"]),
     ...mapState("Cart", ["deliveryType", "currentDeliveryAddress"]),
     ...mapState("Orders", ["userAddresses"]),
 
     selectOptions() {
-      return this.isAuthorized ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => it.name)] : UNAUTHORIZED_OPTIONS;
+      return this.isAuthenticated ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => it.name)] : UNAUTHORIZED_OPTIONS;
     },
     cartFormAddressLabel() {
       if (!Object.values(OPTIONS).includes(this.deliveryType)) {
