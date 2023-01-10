@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import VuexPlugins from '@/plugins/vuexPlugins';
+
 import modules from "@/store/modules";
 import { RESET_STORE } from "@/store/mutation-types";
 import { setupState as resetBuilderState } from "@/store/modules/builder.store";
@@ -24,4 +26,5 @@ const mutations = {
 export default new Vuex.Store({
   mutations,
   modules,
+  plugins: [VuexPlugins],
 });

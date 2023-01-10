@@ -24,7 +24,13 @@ export const SET_PIZZA_COUNT = "SET_PIZZA_COUNT";
 
 export const CHANGE_SHOW_MODAL_STATUS = "CHANGE_SHOW_MODAL_STATUS";
 
-export const FETCH_PIZZAS = "FETCH_PIZZAS";
+export const FETCH_DOUGH = "FETCH_DOUGH";
+
+export const FETCH_SIZES = "FETCH_SIZES";
+
+export const FETCH_SAUCES = "FETCH_SAUCES";
+
+export const FETCH_INGREDIENTS = "FETCH_INGREDIENTS";
 
 export const FETCH_MISC = "FETCH_MISC";
 
