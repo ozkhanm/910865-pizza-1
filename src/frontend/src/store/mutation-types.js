@@ -75,3 +75,5 @@ export const ADD_NEW_ADDRESS = "ADD_NEW_ADDRESS";
 export const EDIT_ADDRESS = "EDIT_ADDRESS";
 
 export const DELETE_ADDRESS = "DELETE_ADDRESS";
+
+export const SET_USER = "SET_USER";
