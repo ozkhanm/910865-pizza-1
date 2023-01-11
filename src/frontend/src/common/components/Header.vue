@@ -39,7 +39,7 @@
             :srcset="$imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + $imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
           >
           <img
-            :src="$imageLink(user.avatar)"
+            :src="user.avatar"
             :srcset="$imageWithExtensionLink(user.avatar, '@2x.jpg')"
             :alt="user.name"
             width="32"
@@ -52,7 +52,7 @@
         href="#"
         class="header__logout"
         @click.prevent
-        @click="logoutButtonClickHandler"
+        @click="$logout"
       >
         <span>Выйти</span>
       </a>
@@ -65,7 +65,7 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import AppLogo from "@/common/components/AppLogo.vue";
 
-import { imageLink, imageWithExtensionLink } from "@/common/mixins";
+import { imageWithExtensionLink, logout } from "@/common/mixins";
 
 import { SIDEBAR_MENU } from "@/common/constants"
 
@@ -76,7 +76,7 @@ export default {
   components: {
     AppLogo,
   },
-  mixins: [imageLink, imageWithExtensionLink],
+  mixins: [imageWithExtensionLink, logout],
   computed: {
     ...mapState("Auth", ["user", "isAuthenticated"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
@@ -91,13 +91,6 @@ export default {
 
     profileIconClickHandler() {
       this.changeActiveSidebarMenu(SIDEBAR_MENU.USER_DATA.LABEL);
-    },
-    logoutButtonClickHandler() {
-      this.changeAuthStatus(false);
-
-      if (this.$router.currentRoute.name !== "Index") {
-        this.$router.push({ name: "Index" });
-      }
     },
   },
 };

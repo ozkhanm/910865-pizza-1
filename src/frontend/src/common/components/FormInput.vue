@@ -7,6 +7,7 @@
       <span :class="spanClass">{{ text }}</span>
 
       <input
+        ref="input"
         :class="disabled ? 'disabled' : ''"
         v-if="!slotProvided"
         :type="inputType"

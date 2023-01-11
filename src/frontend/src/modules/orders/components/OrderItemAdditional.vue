@@ -1,7 +1,7 @@
 <template>
   <li>
     <img
-      :src="$imageLink(image)"
+      :src="image"
       width="20"
       height="30"
       :alt="name"
@@ -14,11 +14,8 @@
 </template>
 
 <script>
-import { imageLink } from "@/common/mixins";
-
 export default {
   name: "OrderItemAdditional",
-  mixins: [imageLink],
   props: {
     name: {
       type: String,

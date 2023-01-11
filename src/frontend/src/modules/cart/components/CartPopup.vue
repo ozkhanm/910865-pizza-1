@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 import { RESET_STORE } from "@/store/mutation-types";
 
@@ -37,10 +37,11 @@ export default {
     ...mapMutations({
       resetStore: RESET_STORE,
     }),
+    ...mapActions("Builder", ["init"]),
 
     popupCloseHandler() {
       this.resetStore();
-      this.$store.dispatch("Builder/init");
+      this.init();
     },
   },
 };

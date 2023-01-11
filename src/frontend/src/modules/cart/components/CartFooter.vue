@@ -41,8 +41,8 @@ export default {
   },
   computed: {
     ...mapState("Cart", ["cart"]),
-    ...mapGetters("Cart", ["totalOrderPrice"]),
-    ...mapState("Orders", ["selectedMisc", "userOrders"]),
+    ...mapGetters("Cart", ["totalOrderPrice", "selectedMisc"]),
+    ...mapState("Orders", ["userOrders"]),
     ...mapState("Auth", ["isAuthenticated"]),
 
     buttonDisabled() {

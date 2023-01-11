@@ -1,11 +1,9 @@
 <template>
-  <form
-    action="test.html"
-    method="post"
-  >
+  <form>
     <FormInput
       v-for="(formData, dataId) in AUTH_FORM_INPUT_DATA"
       :key="dataId"
+      :ref="formData.inputName"
       class="sign-form__input"
       :text="formData.text"
       :inputType="formData.inputType"
@@ -18,13 +16,13 @@
 
     <SubmitButton
       text="Авторизоваться"
-      :buttonClickHandler="submitButtonClickHandler"
+      :buttonClickHandler="login"
     />
   </form>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
 import SubmitButton from "@/common/components/SubmitButton.vue";
@@ -53,16 +51,23 @@ export default {
     ...mapMutations("Auth", {
       changeAuthStatus: CHANGE_AUTH_STATUS,
     }),
+    ...mapActions("Auth", {
+      loginUser: "login",
+    }),
 
-    submitButtonClickHandler() {
-      if (this.user.email === this.email && this.user.password === this.pass) {
-        this.changeAuthStatus(true);
-        this.$router.push({ name: "Index" });
-      }
-    },
     inputChangeHandler(e, field) {
       this[field] = e.target.value;
     },
+    async login() {
+      await this.loginUser({
+        email: this.email,
+        password: this.pass,
+      });
+      this.$router.push("/");
+    },
+  },
+  mounted() {
+    this.$refs.email[0].$refs.input.focus();
   },
 };
 </script>

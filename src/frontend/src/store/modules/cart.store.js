@@ -11,19 +11,24 @@ import {
   UPDATE_STREET_VALUE,
   UPDATE_HOUSE_VALUE,
   UPDATE_APARTMENT_VALUE,
-  UPDATE_EXISTING_PIZZA
+  UPDATE_EXISTING_PIZZA,
+  DECREASE_MISC_COUNT,
+  INCREASE_MISC_COUNT,
+  SET_MISC_COUNT,
+  ADD_ORDER_MISC,
 } from "@/store/mutation-types";
 
 export const setupState = () => ({
   cart: [],
+  selectedMisc: {},
   deliveryType: DELIVERY_DEFAULT_TYPE,
   currentDeliveryAddress: null,
 });
 
 const getters = {
-  totalOrderPrice(state, _, rootState) {
+  totalOrderPrice(state) {
     const pizzasPrice = countSum(state.cart);
-    const miscPrice = countSum(Object.values(rootState.Orders.selectedMisc));
+    const miscPrice = countSum(Object.values(state.selectedMisc));
 
     return pizzasPrice + miscPrice;
   },
@@ -87,6 +92,41 @@ const mutations = {
 
     cart[oldPizzaIndex] = pizza;
     state.cart = cart;
+  },
+  [DECREASE_MISC_COUNT](state, misc) {
+    const selectedMisc = { ...state.selectedMisc };
+
+    selectedMisc[misc.name].amount--;
+
+    state.selectedMisc = { ...selectedMisc };
+  },
+  [INCREASE_MISC_COUNT](state, misc) {
+    const selectedMisc = { ...state.selectedMisc };
+
+    if (selectedMisc[misc.name]) {
+      selectedMisc[misc.name].amount++;
+    } else {
+      selectedMisc[misc.name] = misc;
+      selectedMisc[misc.name].amount = 1;
+    }
+
+    state.selectedMisc = { ...selectedMisc };
+  },
+  [SET_MISC_COUNT](state, { count, item }) {
+    const selectedMisc = { ...state.selectedMisc };
+    const miscName = item.name;
+
+    if (count !== 0) {
+      selectedMisc[miscName] = this.state["Builder"].misc.find(it => it.name === miscName);
+      selectedMisc[miscName].amount = count;
+    } else {
+      delete selectedMisc[miscName];
+    }
+
+    state.selectedMisc = { ...selectedMisc };
+  },
+  [ADD_ORDER_MISC](state, misc) {
+    state.selectedMisc = misc;
   },
 };
 

@@ -83,9 +83,9 @@ export default {
   methods: {
     ...mapMutations("Cart", {
       addToCart: ADD_TO_CART,
+      addOrderMisc: ADD_ORDER_MISC,
     }),
     ...mapMutations("Orders", {
-      addOrderMisc: ADD_ORDER_MISC,
       deleteOrder: DELETE_ORDER,
     }),
 

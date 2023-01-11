@@ -77,3 +77,7 @@ export const EDIT_ADDRESS = "EDIT_ADDRESS";
 export const DELETE_ADDRESS = "DELETE_ADDRESS";
 
 export const SET_USER = "SET_USER";
+
+export const FETCH_USER_ADDRESSES = "FETCH_USER_ADDRESSES";
+
+export const FETCH_USER_ORDERS = "FETCH_USER_ORDERS";

@@ -29,6 +29,8 @@ const actions = {
 
       commit(CHANGE_AUTH_STATUS, true);
       commit(SET_USER, data);
+      dispatch("Orders/fetchUserAddresses", null, { root: true });
+      dispatch("Orders/fetchUserOrders", null, { root: true });
     } catch {
       dispatch("logout", false);
     }

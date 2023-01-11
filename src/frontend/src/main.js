@@ -1,5 +1,7 @@
 import Vue from "vue";
 
+import "@/plugins/vuePlugins";
+
 import store from "@/store";
 
 import router from "@/router";
