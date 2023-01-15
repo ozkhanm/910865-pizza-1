@@ -14,9 +14,10 @@
           <option
             v-for="(option, id) in selectOptions"
             :key="id"
-            :value="id"
+            :value="option.id"
+            :selected="deliveryType === option.name"
           >
-            {{ option }}
+            {{ option.name }}
           </option>
         </select>
       </FormInput>
@@ -27,6 +28,9 @@
         inputType="text"
         inputName="tel"
         placeholder="+7 999-999-99-99"
+        :required="true"
+        :value="phone"
+        :inputChangeHandler="updatePhoneValue"
       />
 
       <div
@@ -43,9 +47,9 @@
           :inputType="formData.inputType"
           :inputName="formData.inputName"
           :required="formData.required"
-          :value="isDefaultOption ? '' : currentDeliveryAddress[formData.inputName]"
+          :value="cartFormInputValue(formData)"
           :disabled="!isDefaultOption"
-          :inputChangeHandler="updateStreetValue"
+          :inputChangeHandler="deliveryFormInputHandler(formData.inputName)"
         />
       </div>
     </div>
@@ -66,7 +70,8 @@ import {
   SET_DELIVERY_ADDRESS,
   UPDATE_STREET_VALUE,
   UPDATE_HOUSE_VALUE,
-  UPDATE_APARTMENT_VALUE
+  UPDATE_APARTMENT_VALUE,
+  UPDATE_PHONE_VALUE
 } from "@/store/mutation-types";
 
 export default {
@@ -84,11 +89,14 @@ export default {
   },
   computed: {
     ...mapState("Auth", ["isAuthenticated"]),
-    ...mapState("Cart", ["deliveryType", "currentDeliveryAddress"]),
+    ...mapState("Cart", ["deliveryType", "currentDeliveryAddress", "phone"]),
     ...mapState("Orders", ["userAddresses"]),
 
     selectOptions() {
-      return this.isAuthenticated ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => it.name)] : UNAUTHORIZED_OPTIONS;
+      return this.isAuthenticated ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => ({
+        name: it.name,
+        id: it.id,
+      }))] : UNAUTHORIZED_OPTIONS;
     },
     cartFormAddressLabel() {
       if (!Object.values(OPTIONS).includes(this.deliveryType)) {
@@ -108,22 +116,43 @@ export default {
       updateStreetValue: UPDATE_STREET_VALUE,
       updateHouseValue: UPDATE_HOUSE_VALUE,
       updateApartmentValue: UPDATE_APARTMENT_VALUE,
+      updatePhoneValue: UPDATE_PHONE_VALUE,
     }),
 
     selectChangeHandler(e) {
-      const selectedOption = e.target.selectedOptions[0].text;
+      const selectedOption = {
+        name: e.target.selectedOptions[0].text,
+        id: parseInt(e.target.selectedOptions[0].value),
+      };
 
-      this.setDeliveryType(selectedOption);
+      this.setDeliveryType(selectedOption.name);
 
-      if (selectedOption === OPTIONS.GET_BY_MYSELF) {
+      if (selectedOption.name === OPTIONS.GET_BY_MYSELF) {
         this.setDeliveryAddress(null);
       }
 
-      if (!Object.values(OPTIONS).includes(selectedOption)) {
-        const currentAddress = this.userAddresses.find(it => it.name === selectedOption);
+      if (!Object.values(OPTIONS).includes(selectedOption.name)) {
+        const currentAddress = this.userAddresses.find(it => it.id === selectedOption.id);
 
         this.setDeliveryAddress(currentAddress);
       }
+    },
+    deliveryFormInputHandler(inputName) {
+      const INPUT_HANDLER_MAP = {
+        street: this.updateStreetValue,
+        building: this.updateHouseValue,
+        flat: this.updateApartmentValue,
+        phone: this.updatePhoneValue,
+      };
+
+      return INPUT_HANDLER_MAP[inputName];
+    },
+    cartFormInputValue(formData) {
+      if (this.currentDeliveryAddress !== null) {
+        return this.currentDeliveryAddress[formData.inputName] !== undefined ? this.currentDeliveryAddress[formData.inputName] : "";
+      }
+
+      return this.isDefaultOption ? '' : this.currentDeliveryAddress[formData.inputName];
     },
   }
 };

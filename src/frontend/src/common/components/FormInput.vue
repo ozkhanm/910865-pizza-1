@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <label
-      class="input"
-      :class="labelClass"
-    >
-      <span :class="spanClass">{{ text }}</span>
+  <label
+    class="input"
+    :class="labelClass"
+  >
+    <span :class="spanClass">{{ text }}</span>
 
-      <input
-        ref="input"
-        :class="disabled ? 'disabled' : ''"
-        v-if="!slotProvided"
-        :type="inputType"
-        :name="inputName"
-        :placeholder="placeholder"
-        :required="required"
-        :value="value"
-        :disabled="disabled"
-        @change="(e) => inputChangeHandler(e, inputName)"
-      />
-      <slot />
-    </label>
-  </div>
+    <input
+      ref="input"
+      :class="disabled ? 'disabled' : ''"
+      v-if="!slotProvided"
+      :type="inputType"
+      :name="inputName"
+      :placeholder="placeholder"
+      :required="required"
+      :value="value"
+      :disabled="disabled"
+      @change="(e) => inputChangeHandler(e, inputName)"
+    />
+    <slot />
+  </label>
 </template>
 
 <script>

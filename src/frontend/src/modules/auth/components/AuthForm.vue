@@ -1,5 +1,7 @@
 <template>
-  <form>
+  <form
+    @submit.prevent="login"
+  >
     <FormInput
       v-for="(formData, dataId) in AUTH_FORM_INPUT_DATA"
       :key="dataId"
@@ -14,22 +16,21 @@
       :inputChangeHandler="inputChangeHandler"
     />
 
-    <SubmitButton
-      text="Авторизоваться"
-      :buttonClickHandler="login"
-    />
+    <button
+      type="submit"
+      class="button"
+    >
+      Авторизоваться
+    </button>
   </form>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
-import SubmitButton from "@/common/components/SubmitButton.vue";
 
 import { AUTH_FORM_INPUT_DATA } from "@/common/constants";
-
-import { CHANGE_AUTH_STATUS } from "@/store/mutation-types";
 
 export default {
   name: "AuthForm",
@@ -42,15 +43,8 @@ export default {
   },
   components: {
     FormInput,
-    SubmitButton,
-  },
-  computed: {
-    ...mapState("Auth", ["user"]),
   },
   methods: {
-    ...mapMutations("Auth", {
-      changeAuthStatus: CHANGE_AUTH_STATUS,
-    }),
     ...mapActions("Auth", {
       loginUser: "login",
     }),

@@ -37,7 +37,7 @@ export default {
     ...mapMutations({
       resetStore: RESET_STORE,
     }),
-    ...mapActions("Builder", ["init"]),
+    ...mapActions(["init"]),
 
     popupCloseHandler() {
       this.resetStore();

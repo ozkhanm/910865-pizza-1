@@ -29,7 +29,7 @@ export class CrudApiService extends ReadOnlyApiService {
   }
 
   async put(entity) {
-    const { data } = await axios.put(this.#resource, entity);
+    const { data } = await axios.put(`${this.#resource}/${entity.id}`, entity);
 
     return data;
   }

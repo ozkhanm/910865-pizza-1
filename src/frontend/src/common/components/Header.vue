@@ -66,10 +66,9 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 import AppLogo from "@/common/components/AppLogo.vue";
 
 import { imageWithExtensionLink, logout } from "@/common/mixins";
-
 import { SIDEBAR_MENU } from "@/common/constants"
 
-import { CHANGE_ACTIVE_SIDEBAR_MENU, CHANGE_AUTH_STATUS } from "@/store/mutation-types";
+import { CHANGE_ACTIVE_SIDEBAR_MENU } from "@/store/mutation-types";
 
 export default {
   name: "Header",
@@ -84,9 +83,6 @@ export default {
   methods: {
     ...mapMutations("Orders", {
       changeActiveSidebarMenu: CHANGE_ACTIVE_SIDEBAR_MENU,
-    }),
-    ...mapMutations("Auth", {
-      changeAuthStatus: CHANGE_AUTH_STATUS,
     }),
 
     profileIconClickHandler() {

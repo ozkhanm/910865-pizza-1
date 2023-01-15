@@ -12,11 +12,11 @@
       :id="address.id"
       :name="address.name"
       :street="address.street"
-      :house="address.house"
-      :apartment="address.apartment"
+      :building="address.building"
+      :flat="address.flat"
       :comment="address.comment"
       :inputChangeHandler="inputChangeHandler"
-      :submitButtonClickHandler="submitButtonClickHandler"
+      :formSubmitHandler="formSubmitHandler"
       :editButtonClickHandler="editButtonClickHandler"
       :deleteAddressButtonClickHandler="deleteAddressButtonClickHandler"
     />
@@ -37,21 +37,21 @@
     <OrderAddress
       v-else
       :isAddNewAddress="isAddNewAddress"
-      :id="newAddressId"
+      :id="id"
       :name="name"
       :street="street"
-      :house="house"
-      :apartment="apartment"
+      :building="building"
+      :flat="flat"
       :comment="comment"
       :inputChangeHandler="inputChangeHandler"
-      :submitButtonClickHandler="submitButtonClickHandler"
+      :formSubmitHandler="formSubmitHandler"
       :editButtonClickHandler="editButtonClickHandler"
     />
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 import OrderUserInfo from "@/modules/orders/components/OrderUserInfo.vue";
 import OrderAddress from "@/modules/orders/components/OrderAddress.vue";
@@ -59,13 +59,8 @@ import OrderAddress from "@/modules/orders/components/OrderAddress.vue";
 import { addressProperySeparator } from "@/common/constants";
 
 import {
-  ADD_NEW_ADDRESS,
-  EDIT_ADDRESS,
-  SET_EDITING_ADDRESS,
-  DELETE_ADDRESS
+  SET_EDITING_ADDRESS
 } from "@/store/mutation-types";
-
-import { uniqueId } from "lodash";
 
 export default {
   name: "Profile",
@@ -76,11 +71,11 @@ export default {
   data() {
     return {
       isAddNewAddress: false,
-      newAddressId: parseInt(uniqueId()),
+      id: -1,
       name: "",
       street: "",
-      house: "",
-      apartment: "",
+      building: "",
+      flat: "",
       comment: "",
     };
   },
@@ -89,17 +84,15 @@ export default {
   },
   methods: {
     ...mapMutations("Orders", {
-      addNewAddress: ADD_NEW_ADDRESS,
-      editAddress: EDIT_ADDRESS,
       setEditingAddress: SET_EDITING_ADDRESS,
-      deleteAddress: DELETE_ADDRESS,
     }),
+    ...mapActions("Orders", ["postAddress", "deleteAddress", "putAddress"]),
 
     resetInputData() {
       this.name = "";
       this.street = "";
-      this.house = "";
-      this.apartment = "";
+      this.building = "";
+      this.flat = "";
       this.comment = "";
     },
     addNewAddressButtonClickHandler() {
@@ -113,37 +106,34 @@ export default {
       this[property] = e.target.value;
     },
     editButtonClickHandler(id) {
-      const { name, street, house, apartment, comment } = this.userAddresses.find(it => it.id === id);
+      const { id: addressId, name, street, building, flat, comment } = this.userAddresses.find(it => it.id === id);
 
       this.isAddNewAddress = false;
       this.setEditingAddress(id);
       this.name = name;
       this.street = street;
-      this.house = house;
-      this.apartment = apartment;
+      this.building = building;
+      this.flat = flat;
       this.comment = comment;
-      this.id = id;
+      this.id = addressId;
     },
-    submitButtonClickHandler() {
+    async formSubmitHandler() {
       const addressData = {
-        id: this.id,
         name: this.name,
         street: this.street,
-        house: this.house,
-        apartment: this.apartment,
+        building: this.building,
+        flat: this.flat,
         comment: this.comment,
       };
 
       if (this.isAddNewAddress) {
-        const newAddress = {
-          ...addressData,
-          id: parseInt(uniqueId()),
-        };
-
-        this.addNewAddress(newAddress);
+        await this.postAddress(addressData);
         this.isAddNewAddress = false;
       } else {
-        this.editAddress(addressData);
+        await this.putAddress({
+          ...addressData,
+          id: this.id,
+        });
         this.setEditingAddress(-1);
       }
 

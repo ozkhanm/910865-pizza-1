@@ -12,16 +12,16 @@
         <div class="product__text">
           <h2>{{ itemData.name }}</h2>
           <ul>
-            <li>{{ doughText }}</li>
-            <li>{{ sauceText }}</li>
-            <li>{{ ingredientsText }}</li>
+            <li>{{ $doughText(itemData.sizeId, itemData.doughId, getEntityById) }}</li>
+            <li>{{ $sauceText(itemData.sauceId, getEntityById) }}</li>
+            <li>{{ $ingredientsText(itemData.ingredients, ingredients) }}</li>
           </ul>
         </div>
       </div>
 
       <ItemCounter
         class="cart-list__counter"
-        :count="itemData.amount"
+        :count="itemData.quantity"
         :item="itemData"
         :minCount="0"
         :maxCount="Infinity"
@@ -31,7 +31,7 @@
       />
 
       <div class="cart-list__price">
-        <b>{{ itemData.price * itemData.amount }} ₽</b>
+        <b>{{ pizzaPrice(itemData.sizeId, itemData.doughId, itemData.sauceId, itemData.ingredients, getEntityById) * itemData.quantity }} ₽</b>
       </div>
 
       <div class="cart-list__button">
@@ -49,10 +49,11 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import ItemCounter from "@/common/components/ItemCounter.vue";
 
+import { doughText, sauceText, ingredientsText } from "@/common/mixins";
 import { doughSpellingMap } from "@/common/constants";
 import { getDoughText, getSauceText, getIngredientsText } from "@/common/helpers.js";
 
@@ -73,6 +74,7 @@ export default {
   components: {
     ItemCounter,
   },
+  mixins: [doughText, sauceText, ingredientsText],
   data() {
     return {
       doughSpellingMap,
@@ -81,22 +83,15 @@ export default {
       getIngredientsText,
     };
   },
-  computed: {
-    doughText() {
-      return getDoughText(this.itemData.size, this.itemData.dough, doughSpellingMap);
-    },
-    sauceText() {
-      return getSauceText(this.itemData.sauce);
-    },
-    ingredientsText() {
-      return getIngredientsText(this.itemData.ingredients);
-    },
-  },
   props: {
     itemData: {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapState(["ingredients"]),
+    ...mapGetters(["getEntityById", "pizzaPrice"]),
   },
   methods: {
     ...mapMutations("Cart", {
@@ -114,20 +109,18 @@ export default {
     }),
 
     pizzaChangeButtonClickHandler() {
-      const { dough, name, sauce, size, ingredients} = this.itemData;
+      const { doughId, name, sauceId, sizeId, ingredients} = this.itemData;
 
       this.setEditingPizza(this.itemData);
-      this.updateDoughValue(dough);
-      this.updateSauceValue(sauce);
-      this.updateSizeValue(size);
+      this.updateDoughValue(doughId);
+      this.updateSauceValue(sauceId);
+      this.updateSizeValue(sizeId);
       this.updateName(name);
 
-      Object.values(ingredients).forEach(it => {
-        this.setCount({
-          count: it.amount,
-          item: it,
-        });
-      });
+      ingredients.forEach(it => this.setCount({
+        count: it.quantity,
+        item: this.ingredients.find(ingredient => ingredient.id === it.ingredientId),
+      }));
     },
   },
 };

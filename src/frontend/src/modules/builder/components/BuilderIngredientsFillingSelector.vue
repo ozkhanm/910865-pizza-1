@@ -21,7 +21,7 @@
 
         <ItemCounter
           class="counter--orange ingredients__counter"
-          :count="$itemsCounter(selectedIngredients, ingredient.name)"
+          :count="$itemsCounter(selectedIngredients, ingredient.id, 'ingredientId')"
           :item="ingredient"
           :minCount="0"
           :maxCount="MAX_INGREDIENTS_NUMBER"
@@ -63,7 +63,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["ingredients"]),
+    ...mapState(["ingredients"]),
     ...mapState("Builder", ["selectedIngredients"]),
   },
   methods: {

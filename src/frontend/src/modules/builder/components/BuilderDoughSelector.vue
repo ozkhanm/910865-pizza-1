@@ -35,7 +35,7 @@ export default {
     RadioButton,
   },
   computed: {
-    ...mapState("Builder", ["dough"]),
+    ...mapState(["dough"]),
     ...mapState("Builder", ["currentDough"]),
   },
   methods: {

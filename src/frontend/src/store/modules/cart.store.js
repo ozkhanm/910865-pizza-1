@@ -1,5 +1,4 @@
 import { DELIVERY_DEFAULT_TYPE } from "@/common/constants";
-import { countSum } from "@/common/helpers";
 
 import {
   ADD_TO_CART,
@@ -16,19 +15,23 @@ import {
   INCREASE_MISC_COUNT,
   SET_MISC_COUNT,
   ADD_ORDER_MISC,
+  UPDATE_PHONE_VALUE
 } from "@/store/mutation-types";
 
 export const setupState = () => ({
   cart: [],
-  selectedMisc: {},
+  selectedMisc: [],
   deliveryType: DELIVERY_DEFAULT_TYPE,
   currentDeliveryAddress: null,
+  phone: "",
 });
 
 const getters = {
-  totalOrderPrice(state) {
-    const pizzasPrice = countSum(state.cart);
-    const miscPrice = countSum(Object.values(state.selectedMisc));
+  totalOrderPrice(state, _, rootState, rootGetters) {
+    const pizzasPrice = state.cart.reduce((prev, curr) => {
+      return prev + rootGetters.pizzaPrice(curr.sizeId, curr.doughId, curr.sauceId, curr.ingredients, rootGetters.getEntityById) * curr.quantity;
+    }, 0);
+    const miscPrice = rootGetters.countSum(state.selectedMisc, rootState.misc);
 
     return pizzasPrice + miscPrice;
   },
@@ -47,10 +50,13 @@ const mutations = {
     const targetPizzaIndex = cart.findIndex(it => it.name === pizza.name);
     const targetPizza = cart[targetPizzaIndex];
 
-    if (targetPizza.amount !== 0) {
-      targetPizza.amount--;
+    targetPizza.quantity--;
+
+    if (targetPizza.quantity !== 0) {
       cart[targetPizzaIndex] = targetPizza;
       state.cart = cart;
+    } else {
+      state.cart = cart.filter(it => it.name !== pizza.name);
     }
   },
   [INCREASE_PIZZA_COUNT](state, pizza) {
@@ -58,7 +64,7 @@ const mutations = {
     const targetPizzaIndex = cart.findIndex(it => it.name === pizza.name);
     const targetPizza = cart[targetPizzaIndex];
 
-    targetPizza.amount++;
+    targetPizza.quantity++;
     cart[targetPizzaIndex] = targetPizza;
     state.cart = cart;
   },
@@ -67,9 +73,14 @@ const mutations = {
     const targetPizzaIndex = cart.findIndex(it => it.name === item.name);
     const targetPizza = cart[targetPizzaIndex];
 
-    targetPizza.amount = count;
-    cart[targetPizzaIndex] = targetPizza;
-    state.cart = cart;
+    targetPizza.quantity = count;
+
+    if (count === 0) {
+      state.cart = cart.filter(it => it.name !== item.name);
+    } else {
+      cart[targetPizzaIndex] = targetPizza;
+      state.cart = cart;
+    }
   },
   [SET_DELIVERY_TYPE](state, type) {
     state.deliveryType = type;
@@ -81,10 +92,10 @@ const mutations = {
     state.currentDeliveryAddress = { ...state.currentDeliveryAddress, street: event.target.value };
   },
   [UPDATE_HOUSE_VALUE](state, event) {
-    state.currentDeliveryAddress = { ...state.currentDeliveryAddress, house: event.target.value };
+    state.currentDeliveryAddress = { ...state.currentDeliveryAddress, building: event.target.value };
   },
   [UPDATE_APARTMENT_VALUE](state, event) {
-    state.currentDeliveryAddress = { ...state.currentDeliveryAddress, apartment: event.target.value };
+    state.currentDeliveryAddress = { ...state.currentDeliveryAddress, flat: event.target.value };
   },
   [UPDATE_EXISTING_PIZZA](state, pizza) {
     const cart = [...state.cart];
@@ -93,40 +104,57 @@ const mutations = {
     cart[oldPizzaIndex] = pizza;
     state.cart = cart;
   },
-  [DECREASE_MISC_COUNT](state, misc) {
-    const selectedMisc = { ...state.selectedMisc };
-
-    selectedMisc[misc.name].amount--;
-
-    state.selectedMisc = { ...selectedMisc };
-  },
-  [INCREASE_MISC_COUNT](state, misc) {
-    const selectedMisc = { ...state.selectedMisc };
-
-    if (selectedMisc[misc.name]) {
-      selectedMisc[misc.name].amount++;
-    } else {
-      selectedMisc[misc.name] = misc;
-      selectedMisc[misc.name].amount = 1;
-    }
-
-    state.selectedMisc = { ...selectedMisc };
-  },
-  [SET_MISC_COUNT](state, { count, item }) {
-    const selectedMisc = { ...state.selectedMisc };
-    const miscName = item.name;
-
-    if (count !== 0) {
-      selectedMisc[miscName] = this.state["Builder"].misc.find(it => it.name === miscName);
-      selectedMisc[miscName].amount = count;
-    } else {
-      delete selectedMisc[miscName];
-    }
-
-    state.selectedMisc = { ...selectedMisc };
-  },
   [ADD_ORDER_MISC](state, misc) {
     state.selectedMisc = misc;
+  },
+  [UPDATE_PHONE_VALUE](state, event) {
+    state.phone = event.target.value;
+  },
+  [DECREASE_MISC_COUNT](state, misc) {
+    let selectedMisc = [...state.selectedMisc];
+    const miscIndex = selectedMisc.findIndex(it => it.miscId === misc.id);
+
+    selectedMisc[miscIndex].quantity--;
+
+    if (selectedMisc[miscIndex].quantity === 0) {
+      selectedMisc = selectedMisc.filter(it => it.miscId !== misc.id);
+    }
+
+    state.selectedMisc = selectedMisc;
+  },
+  [INCREASE_MISC_COUNT](state, misc) {
+    const selectedMisc = [...state.selectedMisc];
+    const miscIndex = selectedMisc.findIndex(it => it.miscId === misc.id);
+
+    if (miscIndex !== -1) {
+      selectedMisc[miscIndex].quantity++;
+    } else {
+      selectedMisc.push({
+        miscId: misc.id,
+        quantity: 1,
+      });
+    }
+
+    state.selectedMisc = selectedMisc;
+  },
+  [SET_MISC_COUNT](state, { count, item }) {
+    let selectedMisc = [...state.selectedMisc];
+    const miscIndex = selectedMisc.findIndex(it => it.miscId === item.id);
+
+    if (miscIndex !== -1) {
+      if (count !== 0) {
+        selectedMisc[miscIndex].quantity = count;
+      } else {
+        selectedMisc = selectedMisc.filter(it => it.miscId !== item.id);
+      }
+    } else {
+      selectedMisc.push({
+        miscId: item.id,
+        quantity: count,
+      });
+    }
+
+    state.selectedMisc = selectedMisc;
   },
 };
 

@@ -42,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["sauces"]),
+    ...mapState(["sauces"]),
     ...mapState("Builder", ["currentSauce"]),
   },
   methods: {

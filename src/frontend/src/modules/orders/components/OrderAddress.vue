@@ -23,9 +23,8 @@
 
       <form
         v-else
-        action="test.html"
-        method="post"
         class="address-form address-form--opened sheet"
+        @submit.prevent="formSubmitHandler"
       >
         <div
           v-if="!isAddNewAddress"
@@ -58,10 +57,12 @@
           >
             Удалить
           </button>
-          <SubmitButton
-            text="Сохранить"
-            :buttonClickHandler="submitButtonClickHandler"
-          />
+          <button
+            type="submit"
+            class="button"
+          >
+            Сохранить
+          </button>
         </div>
       </form>
     </div>
@@ -72,17 +73,17 @@
 import { mapState } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
-import SubmitButton from "@/common/components/SubmitButton.vue";
 
 import { formInputClassSize } from "@/common/mixins";
 
 import { ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
+import { getFullAddress } from "@/common/helpers";
+
 export default {
   name: "OrderAddress",
   components: {
     FormInput,
-    SubmitButton,
   },
   mixins: [formInputClassSize],
   data() {
@@ -100,11 +101,11 @@ export default {
       type: String,
       default: "",
     },
-    house: {
+    building: {
       type: String,
       default: "",
     },
-    apartment: {
+    flat: {
       type: String,
       default: "",
     },
@@ -124,7 +125,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    submitButtonClickHandler: {
+    formSubmitHandler: {
       type: Function,
       default: () => {},
     },
@@ -141,7 +142,13 @@ export default {
     ...mapState("Orders", ["editingAddress"]),
 
     address() {
-      return `${this.street}, д. ${this.house}, кв. ${this.apartment}`;
+      const data = {
+        street: this.street,
+        building: this.building,
+        flat: this.flat,
+      };
+
+      return getFullAddress(data);
     },
   },
 };

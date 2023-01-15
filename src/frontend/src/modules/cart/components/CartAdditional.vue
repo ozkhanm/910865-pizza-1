@@ -19,7 +19,7 @@
         <div class="additional-list__wrapper">
           <ItemCounter
             class="additional-list__counter"
-            :count="$itemsCounter(selectedMisc, item.name)"
+            :count="$itemsCounter(selectedMisc, item.id, 'miscId')"
             :item="item"
             :minCount="0"
             :maxCount="Infinity"
@@ -53,8 +53,8 @@ export default {
   },
   mixins: [itemsCounter],
   computed: {
+    ...mapState(["misc"]),
     ...mapState("Cart", ["selectedMisc"]),
-    ...mapState("Builder", ["misc"]),
   },
   methods: {
     ...mapMutations("Cart", {

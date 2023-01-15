@@ -16,34 +16,30 @@
     </div>
 
     <div class="footer__submit">
-      <SubmitButton
-        text="Оформить заказ"
+      <button
+        type="submit"
+        class="button"
         :disabled="buttonDisabled"
-        :buttonClickHandler="formSubmitHandler"
-      />
+      >
+        Оформить заказ
+      </button>
     </div>
   </section>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import SubmitButton from "@/common/components/SubmitButton.vue";
+import { OPTIONS } from "@/common/constants";
 
-import { CHANGE_SHOW_MODAL_STATUS, ADD_NEW_ORDER } from "@/store/mutation-types";
-
-import { uniqueId } from "lodash";
+import { CHANGE_SHOW_MODAL_STATUS } from "@/store/mutation-types";
 
 export default {
   name: "CartFooter",
-  components: {
-    SubmitButton,
-  },
   computed: {
-    ...mapState("Cart", ["cart"]),
-    ...mapGetters("Cart", ["totalOrderPrice", "selectedMisc"]),
-    ...mapState("Orders", ["userOrders"]),
-    ...mapState("Auth", ["isAuthenticated"]),
+    ...mapState("Cart", ["cart", "selectedMisc", "phone", "currentDeliveryAddress", "deliveryType"]),
+    ...mapState("Auth", ["isAuthenticated", "user"]),
+    ...mapGetters("Cart", ["totalOrderPrice"]),
 
     buttonDisabled() {
       return this.cart.length === 0 || this.totalOrderPrice === 0;
@@ -52,22 +48,27 @@ export default {
   methods: {
     ...mapMutations("Orders", {
       changeShowModalStatus: CHANGE_SHOW_MODAL_STATUS,
-      addNewOrder: ADD_NEW_ORDER,
     }),
+    ...mapActions("Orders", ["postOrder"]),
 
-    formSubmitHandler() {
+    async formSubmitHandler() {
       this.changeShowModalStatus(true);
 
       if (this.isAuthenticated) {
         const order = {
-          id: parseInt(uniqueId()) + 1,
-          orderNumber: parseInt(uniqueId()),
+          userId: this.user.id,
+          phone: this.phone,
+          address: this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
+            street: this.currentDeliveryAddress.street,
+            building: this.currentDeliveryAddress.building,
+            flat: this.currentDeliveryAddress.flat,
+            comment: this.currentDeliveryAddress.comment || "",
+          } : null,
           pizzas: this.cart,
-          additionals: Object.values(this.selectedMisc),
-          orderPrice: this.totalOrderPrice,
+          misc: this.selectedMisc,
         };
 
-        this.addNewOrder(order);
+        await this.postOrder(order);
       }
     },
   },

@@ -19,7 +19,7 @@ export default {
     AppLayout,
   },
   methods: {
-    ...mapActions("Builder", ["init"]),
+    ...mapActions(["init"]),
   },
   created() {
     window.onerror = function(msg, url, line, col, error) {

@@ -35,7 +35,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["sizes"]),
+    ...mapState(["sizes"]),
     ...mapState("Builder", ["currentSize"]),
   },
   methods: {
