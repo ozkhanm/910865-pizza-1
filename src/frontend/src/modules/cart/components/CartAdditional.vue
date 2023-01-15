@@ -19,7 +19,7 @@
         <div class="additional-list__wrapper">
           <ItemCounter
             class="additional-list__counter"
-            :count="$itemsCounter(selectedMisc, item.id, 'miscId')"
+            :count="itemCounter(selectedMisc, item.id, 'miscId')"
             :item="item"
             :minCount="0"
             :maxCount="Infinity"
@@ -38,11 +38,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import ItemCounter from "@/common/components/ItemCounter.vue";
-
-import { itemsCounter } from "@/common/mixins";
 
 import { DECREASE_MISC_COUNT, INCREASE_MISC_COUNT, SET_MISC_COUNT } from "@/store/mutation-types";
 
@@ -51,10 +49,10 @@ export default {
   components: {
     ItemCounter,
   },
-  mixins: [itemsCounter],
   computed: {
     ...mapState(["misc"]),
     ...mapState("Cart", ["selectedMisc"]),
+    ...mapGetters(["itemCounter"]),
   },
   methods: {
     ...mapMutations("Cart", {

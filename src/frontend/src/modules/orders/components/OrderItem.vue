@@ -11,9 +11,9 @@
       <div class="product__text">
         <h2>{{ name }}</h2>
         <ul>
-          <li>{{ $doughText(sizeId, doughId, getEntityById) }}</li>
-          <li>{{ $sauceText(sauceId, getEntityById) }}</li>
-          <li>{{ $ingredientsText(ingredients, ingredientsList) }}</li>
+          <li>{{ doughText(sizeId, doughId, getEntityById) }}</li>
+          <li>{{ sauceText(sauceId, getEntityById) }}</li>
+          <li>{{ ingredientsText(ingredients, ingredientsList) }}</li>
         </ul>
       </div>
     </div>
@@ -25,11 +25,8 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 
-import { doughText, sauceText, ingredientsText } from "@/common/mixins";
-
 export default {
   name: "OrderItem",
-  mixins: [doughText, sauceText, ingredientsText],
   props: {
     doughId: {
       type: Number,
@@ -60,7 +57,7 @@ export default {
     ...mapState({
       ingredientsList: "ingredients",
     }),
-    ...mapGetters(["getEntityById", "pizzaPrice"]),
+    ...mapGetters(["getEntityById", "pizzaPrice", "doughText", "sauceText", "ingredientsText"]),
 
     priceText() {
       const price = this.pizzaPrice(this.sizeId, this.doughId, this.sauceId, this.ingredients, this.getEntityById);

@@ -36,11 +36,11 @@
         <picture>
           <source
             type="image/webp"
-            :srcset="$imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + $imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
+            :srcset="imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
           >
           <img
             :src="user.avatar"
-            :srcset="$imageWithExtensionLink(user.avatar, '@2x.jpg')"
+            :srcset="imageWithExtensionLink(user.avatar, '@2x.jpg')"
             :alt="user.name"
             width="32"
             height="32"
@@ -65,7 +65,7 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import AppLogo from "@/common/components/AppLogo.vue";
 
-import { imageWithExtensionLink, logout } from "@/common/mixins";
+import { logout } from "@/common/mixins";
 import { SIDEBAR_MENU } from "@/common/constants"
 
 import { CHANGE_ACTIVE_SIDEBAR_MENU } from "@/store/mutation-types";
@@ -75,10 +75,11 @@ export default {
   components: {
     AppLogo,
   },
-  mixins: [imageWithExtensionLink, logout],
+  mixins: [logout],
   computed: {
     ...mapState("Auth", ["user", "isAuthenticated"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
+    ...mapGetters(["imageWithExtensionLink"]),
   },
   methods: {
     ...mapMutations("Orders", {

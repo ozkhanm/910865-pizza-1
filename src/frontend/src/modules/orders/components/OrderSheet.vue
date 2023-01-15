@@ -65,8 +65,6 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
-import { getFullAddress } from "@/common/helpers";
-
 import OrderItem from "@/modules/orders/components/OrderItem.vue"
 import OrderItemAdditional from "@/modules/orders/components/OrderItemAdditional.vue"
 
@@ -87,7 +85,7 @@ export default {
   computed: {
     ...mapState(["misc"]),
     ...mapState("Orders", ["userAddresses"]),
-    ...mapGetters(["getEntityById", "pizzaPrice", "countSum"]),
+    ...mapGetters(["getEntityById", "pizzaPrice", "countSum", "fullAddress"]),
 
     orderPrice() {
       const pizzasPrice = this.orderData.orderPizzas.reduce((prev, curr) => {
@@ -101,7 +99,7 @@ export default {
       return this.orderData.addressId && this.userAddresses.find(it => it.id === this.orderData.addressId) || this.orderData.orderAddress;
     },
     addressText() {
-      return this.orderData.orderAddress.name || getFullAddress(this.orderData.orderAddress);
+      return this.orderData.orderAddress.name || this.fullAddress(this.orderData.orderAddress);
     },
   },
   methods: {

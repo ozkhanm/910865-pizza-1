@@ -21,7 +21,7 @@
 
         <ItemCounter
           class="counter--orange ingredients__counter"
-          :count="$itemsCounter(selectedIngredients, ingredient.id, 'ingredientId')"
+          :count="itemCounter(selectedIngredients, ingredient.id, 'ingredientId')"
           :item="ingredient"
           :minCount="0"
           :maxCount="MAX_INGREDIENTS_NUMBER"
@@ -35,13 +35,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import SelectorItem from "@/common/components/SelectorItem.vue";
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import AppDrag from "@/common/components/AppDrag.vue";
-
-import { itemsCounter } from "@/common/mixins";
 
 import { ingredientsMap, ITEMS_INPUT_DATA, MAX_INGREDIENTS_NUMBER } from "@/common/constants";
 
@@ -54,7 +52,6 @@ export default {
     ItemCounter,
     AppDrag,
   },
-  mixins: [itemsCounter],
   data() {
     return {
       ingredientsMap,
@@ -65,6 +62,7 @@ export default {
   computed: {
     ...mapState(["ingredients"]),
     ...mapState("Builder", ["selectedIngredients"]),
+    ...mapGetters(["itemCounter"]),
   },
   methods: {
     ...mapMutations("Builder", {

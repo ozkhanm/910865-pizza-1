@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 
+import { doughSpellingMap } from "@/common/constants";
+
 import VuexPlugins from '@/plugins/vuexPlugins';
 
 import modules from "@/store/modules";
@@ -46,6 +48,43 @@ const getters = {
   },
   countSum: () => (items, itemList) => {
     return items?.reduce((prev, curr) => prev + (curr.quantity * itemList.find(it => it.id === curr.miscId).price), 0) || 0;
+  },
+  doughText: () => (sizeId, doughId, getter) => {
+    const size = getter("sizes", sizeId).name;
+    const dough = getter("dough", doughId).name;
+
+    return `${size}, на ${doughSpellingMap[dough]} тесте`;
+  },
+  ingredientsText: () => (ingredients, ingredientsList) => {
+    return `Начинка: ${ ingredients.map(ingredient => {
+      return ingredientsList.find(ingredientListItem => {
+        return ingredientListItem.id === ingredient.ingredientId
+      }).name.toLowerCase()
+    }).join(", ")}`;
+  },
+  sauceText: () => (sauceId, getter) => {
+    const sauce = getter("sauces", sauceId).name;
+
+    return `Соус: ${sauce.toLowerCase()}`;
+  },
+  fullAddress: () => (address) => {
+    const { street, building, flat } = address;
+    const flatStr = flat.length !== 0 ? `, кв. ${address.flat}` : "";
+
+    return `${street}, д. ${building}` + flatStr;
+  },
+  formInputSizeClass: () => (additionalSizeClass, size) => {
+    return size.length !== 0 ? `${additionalSizeClass}--${size}` : "";
+  },
+  imageWithExtensionLink: () => (link, extension) => {
+    const linkWithoutExtension = link.split(".")[0];
+
+    return `${linkWithoutExtension}${extension}`;
+  },
+  itemCounter: () => (items, id, propertyName) => {
+    const itemIndex = items.findIndex(it => it[propertyName] === id);
+
+    return itemIndex === - 1 ? 0 : items[itemIndex].quantity;
   },
 };
 

@@ -37,7 +37,7 @@
           <FormInput
             v-for="(formData, dataId) in ADDRESS_FORM_INPUT_DATA"
             :key="dataId"
-            :class="`address-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
+            :class="`address-form__input ${formInputSizeClass(additionalSizeClass, formData.size)}`"
             :text="formData.text"
             :inputType="formData.inputType"
             :inputName="`addr-${formData.inputName}`"
@@ -70,22 +70,17 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
 
-import { formInputClassSize } from "@/common/mixins";
-
 import { ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
-
-import { getFullAddress } from "@/common/helpers";
 
 export default {
   name: "OrderAddress",
   components: {
     FormInput,
   },
-  mixins: [formInputClassSize],
   data() {
     return {
       ADDRESS_FORM_INPUT_DATA,
@@ -140,6 +135,7 @@ export default {
   },
   computed: {
     ...mapState("Orders", ["editingAddress"]),
+    ...mapGetters(["formInputSizeClass", "fullAddress"]),
 
     address() {
       const data = {
@@ -148,7 +144,7 @@ export default {
         flat: this.flat,
       };
 
-      return getFullAddress(data);
+      return this.fullAddress(data);
     },
   },
 };

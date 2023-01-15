@@ -12,9 +12,9 @@
         <div class="product__text">
           <h2>{{ itemData.name }}</h2>
           <ul>
-            <li>{{ $doughText(itemData.sizeId, itemData.doughId, getEntityById) }}</li>
-            <li>{{ $sauceText(itemData.sauceId, getEntityById) }}</li>
-            <li>{{ $ingredientsText(itemData.ingredients, ingredients) }}</li>
+            <li>{{ doughText(itemData.sizeId, itemData.doughId, getEntityById) }}</li>
+            <li>{{ sauceText(itemData.sauceId, getEntityById) }}</li>
+            <li>{{ ingredientsText(itemData.ingredients, ingredients) }}</li>
           </ul>
         </div>
       </div>
@@ -53,10 +53,6 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import ItemCounter from "@/common/components/ItemCounter.vue";
 
-import { doughText, sauceText, ingredientsText } from "@/common/mixins";
-import { doughSpellingMap } from "@/common/constants";
-import { getDoughText, getSauceText, getIngredientsText } from "@/common/helpers.js";
-
 import {
   DECREASE_PIZZA_COUNT,
   INCREASE_PIZZA_COUNT,
@@ -74,15 +70,6 @@ export default {
   components: {
     ItemCounter,
   },
-  mixins: [doughText, sauceText, ingredientsText],
-  data() {
-    return {
-      doughSpellingMap,
-      getDoughText,
-      getSauceText,
-      getIngredientsText,
-    };
-  },
   props: {
     itemData: {
       type: Object,
@@ -91,7 +78,7 @@ export default {
   },
   computed: {
     ...mapState(["ingredients"]),
-    ...mapGetters(["getEntityById", "pizzaPrice"]),
+    ...mapGetters(["getEntityById", "pizzaPrice", "doughText", "sauceText", "ingredientsText"]),
   },
   methods: {
     ...mapMutations("Cart", {

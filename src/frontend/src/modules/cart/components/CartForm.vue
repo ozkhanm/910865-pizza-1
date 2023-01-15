@@ -42,7 +42,7 @@
         <FormInput
           v-for="(formData, dataId) in CART_ADDRESS_FORM_INPUT_DATA"
           :key="dataId"
-          :class="`cart-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
+          :class="`cart-form__input ${formInputSizeClass(additionalSizeClass, formData.size)}`"
           :text="formData.text"
           :inputType="formData.inputType"
           :inputName="formData.inputName"
@@ -57,11 +57,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
-
-import { formInputClassSize } from "@/common/mixins";
 
 import { UNAUTHORIZED_OPTIONS, OPTIONS, CART_ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
@@ -79,7 +77,6 @@ export default {
   components: {
     FormInput,
   },
-  mixins: [formInputClassSize],
   data() {
     return {
       OPTIONS,
@@ -91,6 +88,7 @@ export default {
     ...mapState("Auth", ["isAuthenticated"]),
     ...mapState("Cart", ["deliveryType", "currentDeliveryAddress", "phone"]),
     ...mapState("Orders", ["userAddresses"]),
+    ...mapGetters(["formInputSizeClass"]),
 
     selectOptions() {
       return this.isAuthenticated ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => ({
