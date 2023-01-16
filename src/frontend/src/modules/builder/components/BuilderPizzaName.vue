@@ -8,6 +8,7 @@
       placeholder="Введите название пиццы"
       :value="pizzaName"
       @input="nameInputChangeHandler"
+      :required="true"
     >
   </label>
 </template>
