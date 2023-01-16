@@ -145,11 +145,6 @@ export default {
       this.deleteAddress(this.id);
     },
   },
-  beforeCreate() {
-    if (!this.$store.state["Auth"].isAuthenticated) {
-      this.$router.push({ name: "Login" });
-    }
-  },
 };
 </script>
 

@@ -27,11 +27,6 @@ export default {
   computed: {
     ...mapState("Orders", ["userOrders"]),
   },
-  beforeCreate() {
-    if (!this.$store.state["Auth"].isAuthenticated) {
-      this.$router.push({ name: "Login" });
-    }
-  },
   created() {
     this.$store.commit("Orders/CHANGE_ACTIVE_SIDEBAR_MENU", SIDEBAR_MENU.ORDER_HISTORY.LABEL);
   },

@@ -18,7 +18,7 @@
       class="header__user"
     >
       <RouterLink
-        to="/sign-in"
+        to="/login"
         class="header__login"
       >
         <span>Войти</span>
