@@ -11,7 +11,10 @@
         :key="ingredient.id"
         class="ingredients__item"
       >
-        <AppDrag :transferData="ingredient">
+        <AppDrag
+          :isDraggable="isDraggable(ingredient)"
+          :transferData="ingredient"
+        >
           <SelectorItem
             class="filling"
             :class="`filling--${ingredientsMap[ingredient.name]}`"
@@ -70,6 +73,10 @@ export default {
       increaseIngredientCount: INCREASE_INGREDIENT_COUNT,
       setCount: SET_INGREDIENT_COUNT,
     }),
+
+    isDraggable(ingredient) {
+      return this.itemCounter(this.selectedIngredients, ingredient.id, "ingredientId") !== MAX_INGREDIENTS_NUMBER;
+    },
   },
 };
 </script>
