@@ -40,8 +40,8 @@ export default {
     ...mapGetters(["getEntityById"]),
 
     getCustomPizzaClass() {
-      const doughName = this.getEntityById("dough", this.currentDough).name;
-      const sauceName = this.getEntityById("sauces", this.currentSauce).name;
+      const doughName = this.getEntityById("dough", this.currentDough)?.name;
+      const sauceName = this.getEntityById("sauces", this.currentSauce)?.name;
 
       return `pizza--foundation--${doughClassMap[doughName]}-${sauceMap[sauceName]}`;
     },

@@ -15,24 +15,31 @@
     <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
 
     <div class="popup__button">
-      <a
-        href="#"
+      <RouterLink
+        :to="popupLink"
         class="button"
-        @click="popupCloseHandler"
+        @click.native="popupCloseHandler"
       >
         Отлично, я жду!
-      </a>
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 import { RESET_STORE } from "@/store/mutation-types";
 
 export default {
   name: "CartPopup",
+  computed: {
+    ...mapState("Auth", ["isAuthenticated"]),
+
+    popupLink() {
+      return this.isAuthenticated ? "/orders" : "/";
+    },
+  },
   methods: {
     ...mapMutations({
       resetStore: RESET_STORE,

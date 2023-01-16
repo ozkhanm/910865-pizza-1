@@ -35,11 +35,11 @@ const getters = {
     return state[entity].find(it => it.id === id);
   },
   pizzaPrice: () => (sizeId, doughId, sauceId, ingredients, getter) => {
-    const multiplier = getter("sizes", sizeId).multiplier;
-    const doughPrice = getter("dough", doughId).price;
-    const saucePrice = getter("sauces", sauceId).price;
+    const multiplier = getter("sizes", sizeId)?.multiplier;
+    const doughPrice = getter("dough", doughId)?.price;
+    const saucePrice = getter("sauces", sauceId)?.price;
     const ingredientsPrice = ingredients.reduce((prev, curr) => {
-      const ingredientPrice = getter("ingredients", curr.ingredientId).price;
+      const ingredientPrice = getter("ingredients", curr.ingredientId)?.price;
 
       return prev + (ingredientPrice * curr.quantity);
     }, 0);
