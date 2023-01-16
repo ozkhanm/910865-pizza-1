@@ -78,25 +78,23 @@ export default {
     async formSubmitHandler() {
       this.changeShowModalStatus(true);
 
-      if (this.isAuthenticated) {
-        const orderAddress = this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
-          street: this.currentDeliveryAddress.street,
-          building: this.currentDeliveryAddress.building,
-          flat: this.currentDeliveryAddress.flat,
-          comment: this.currentDeliveryAddress.comment || "",
-          id: this.currentDeliveryAddress.id || null,
-        } : null;
+      const orderAddress = this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
+        street: this.currentDeliveryAddress.street,
+        building: this.currentDeliveryAddress.building,
+        flat: this.currentDeliveryAddress.flat,
+        comment: this.currentDeliveryAddress.comment || "",
+        id: this.currentDeliveryAddress.id || null,
+      } : null;
 
-        const order = {
-          userId: this.user.id,
-          phone: this.phone,
-          address: orderAddress,
-          pizzas: this.cart,
-          misc: this.selectedMisc,
-        };
+      const order = {
+        userId: this.isAuthenticated ? this.user.id : null,
+        phone: this.phone,
+        address: orderAddress,
+        pizzas: this.cart,
+        misc: this.selectedMisc,
+      };
 
-        await this.postOrder(order);
-      }
+      await this.postOrder(order);
     },
   },
 };
