@@ -81,6 +81,7 @@ export default {
   },
   computed: {
     ...mapState("Orders", ["userAddresses"]),
+    ...mapState("Auth", ["user"]),
   },
   methods: {
     ...mapMutations("Orders", {
@@ -124,6 +125,7 @@ export default {
         building: this.building,
         flat: this.flat,
         comment: this.comment,
+        userId: this.user.id,
       };
 
       if (this.isAddNewAddress) {

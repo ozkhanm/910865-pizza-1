@@ -79,15 +79,18 @@ export default {
       this.changeShowModalStatus(true);
 
       if (this.isAuthenticated) {
+        const orderAddress = this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
+          street: this.currentDeliveryAddress.street,
+          building: this.currentDeliveryAddress.building,
+          flat: this.currentDeliveryAddress.flat,
+          comment: this.currentDeliveryAddress.comment || "",
+          id: this.currentDeliveryAddress.id || null,
+        } : null;
+
         const order = {
           userId: this.user.id,
           phone: this.phone,
-          address: this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
-            street: this.currentDeliveryAddress.street,
-            building: this.currentDeliveryAddress.building,
-            flat: this.currentDeliveryAddress.flat,
-            comment: this.currentDeliveryAddress.comment || "",
-          } : null,
+          address: orderAddress,
           pizzas: this.cart,
           misc: this.selectedMisc,
         };

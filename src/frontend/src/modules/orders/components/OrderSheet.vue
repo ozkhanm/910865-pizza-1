@@ -110,6 +110,15 @@ export default {
     ...mapActions("Orders", ["deleteOrder"]),
 
     repeatButtonClickHandler(order) {
+      const pizzas = order.orderPizzas;
+
+      pizzas.forEach(pizza => {
+        delete pizza.id;
+
+        pizza.ingredients.forEach(ingredient => {
+          delete ingredient.id;
+        });
+      });
       this.addToCart(order.orderPizzas);
 
       if (order.orderMisc) {

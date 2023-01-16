@@ -28,11 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-
-import { OPTIONS } from "@/common/constants";
-
-import { CHANGE_SHOW_MODAL_STATUS } from "@/store/mutation-types";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "CartFooter",
@@ -43,33 +39,6 @@ export default {
 
     buttonDisabled() {
       return this.cart.length === 0 || this.totalOrderPrice === 0;
-    },
-  },
-  methods: {
-    ...mapMutations("Orders", {
-      changeShowModalStatus: CHANGE_SHOW_MODAL_STATUS,
-    }),
-    ...mapActions("Orders", ["postOrder"]),
-
-    async formSubmitHandler() {
-      this.changeShowModalStatus(true);
-
-      if (this.isAuthenticated) {
-        const order = {
-          userId: this.user.id,
-          phone: this.phone,
-          address: this.deliveryType !== OPTIONS.GET_BY_MYSELF ? {
-            street: this.currentDeliveryAddress.street,
-            building: this.currentDeliveryAddress.building,
-            flat: this.currentDeliveryAddress.flat,
-            comment: this.currentDeliveryAddress.comment || "",
-          } : null,
-          pizzas: this.cart,
-          misc: this.selectedMisc,
-        };
-
-        await this.postOrder(order);
-      }
     },
   },
 };
