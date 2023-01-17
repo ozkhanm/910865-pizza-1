@@ -97,14 +97,11 @@ export default {
       }))] : UNAUTHORIZED_OPTIONS;
     },
     cartFormAddressLabel() {
-      if (!Object.values(OPTIONS).includes(this.deliveryType)) {
+      if (!this.isDefaultOption(this.deliveryType)) {
         return "Адрес:";
       }
 
       return "Новый адрес:";
-    },
-    isDefaultOption() {
-      return Object.values(OPTIONS).includes(this.deliveryType);
     },
   },
   methods: {
@@ -117,6 +114,9 @@ export default {
       updatePhoneValue: UPDATE_PHONE_VALUE,
     }),
 
+    isDefaultOption(option) {
+      return Object.values(OPTIONS).includes(option);
+    },
     selectChangeHandler(e) {
       const selectedOption = {
         name: e.target.selectedOptions[0].text,
@@ -125,11 +125,11 @@ export default {
 
       this.setDeliveryType(selectedOption.name);
 
-      if (selectedOption.name === OPTIONS.GET_BY_MYSELF) {
+      if (this.isDefaultOption(selectedOption.name)) {
         this.setDeliveryAddress(null);
       }
 
-      if (!Object.values(OPTIONS).includes(selectedOption.name)) {
+      if (!this.isDefaultOption(selectedOption.name)) {
         const currentAddress = this.userAddresses.find(it => it.id === selectedOption.id);
 
         this.setDeliveryAddress(currentAddress);
@@ -147,10 +147,10 @@ export default {
     },
     cartFormInputValue(formData) {
       if (this.currentDeliveryAddress !== null) {
-        return this.currentDeliveryAddress[formData.inputName] !== undefined ? this.currentDeliveryAddress[formData.inputName] : "";
+        return this.currentDeliveryAddress[formData.inputName] ?? "";
       }
 
-      return this.isDefaultOption ? '' : this.currentDeliveryAddress[formData.inputName];
+      return this.isDefaultOption ? "" : this.currentDeliveryAddress[formData.inputName];
     },
   }
 };
