@@ -7,7 +7,6 @@
 
     <input
       ref="input"
-      :class="disabled ? 'disabled' : ''"
       v-if="!slotProvided"
       :type="inputType"
       :name="inputName"
@@ -75,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.disabled {
+input[type="text"]:disabled {
   background-color: #cecece;
 }
 </style>
