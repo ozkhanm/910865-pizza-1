@@ -177,3 +177,9 @@ export const CART_ADDRESS_FORM_INPUT_DATA = [
     required: false,
   },
 ];
+
+export const AUTH_ERRORS = {
+  EMAIL_REQUIRED: "Поле email обязательно для заполнения",
+  EMAIL_VALID: "Поле email должно быть валидно",
+  PASSWORD_REQUIRED: "Поле пароля обязательно для заполнения",
+};
