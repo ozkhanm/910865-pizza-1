@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <label
-      class="input"
-      :class="labelClass"
-    >
-      <span :class="spanClass">{{ text }}</span>
+  <label
+    class="input"
+    :class="labelClass"
+  >
+    <span :class="spanClass">{{ text }}</span>
 
-      <input
-        :class="disabled ? 'disabled' : ''"
-        v-if="!slotProvided"
-        :type="inputType"
-        :name="inputName"
-        :placeholder="placeholder"
-        :required="required"
-        :value="value"
-        :disabled="disabled"
-        @change="(e) => inputChangeHandler(e, inputName)"
-      />
-      <slot />
-    </label>
-  </div>
+    <input
+      ref="input"
+      v-if="!slotProvided"
+      :type="inputType"
+      :name="inputName"
+      :placeholder="placeholder"
+      :required="required"
+      :value="value"
+      :disabled="disabled"
+      @change="(e) => inputChangeHandler(e, inputName)"
+    />
+    <slot />
+  </label>
 </template>
 
 <script>
@@ -76,7 +74,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.disabled {
+input[type="text"]:disabled {
   background-color: #cecece;
 }
 </style>

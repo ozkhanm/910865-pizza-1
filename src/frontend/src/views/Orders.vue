@@ -15,6 +15,8 @@
 <script>
 import { mapState } from "vuex";
 
+import { SIDEBAR_MENU } from "@/common/constants";
+
 import OrderSheet from "@/modules/orders/components/OrderSheet.vue";
 
 export default {
@@ -25,10 +27,8 @@ export default {
   computed: {
     ...mapState("Orders", ["userOrders"]),
   },
-  beforeCreate() {
-    if (!this.$store.state["Auth"].isAuthorized) {
-      this.$router.push({ name: "Login" });
-    }
+  created() {
+    this.$store.commit("Orders/CHANGE_ACTIVE_SIDEBAR_MENU", SIDEBAR_MENU.ORDER_HISTORY.LABEL);
   },
 };
 </script>

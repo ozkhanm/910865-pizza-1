@@ -23,9 +23,8 @@
 
       <form
         v-else
-        action="test.html"
-        method="post"
         class="address-form address-form--opened sheet"
+        @submit.prevent="formSubmitHandler"
       >
         <div
           v-if="!isAddNewAddress"
@@ -38,7 +37,7 @@
           <FormInput
             v-for="(formData, dataId) in ADDRESS_FORM_INPUT_DATA"
             :key="dataId"
-            :class="`address-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
+            :class="`address-form__input ${formInputSizeClass(additionalSizeClass, formData.size)}`"
             :text="formData.text"
             :inputType="formData.inputType"
             :inputName="`addr-${formData.inputName}`"
@@ -58,10 +57,12 @@
           >
             Удалить
           </button>
-          <SubmitButton
-            text="Сохранить"
-            :buttonClickHandler="submitButtonClickHandler"
-          />
+          <button
+            type="submit"
+            class="button"
+          >
+            Сохранить
+          </button>
         </div>
       </form>
     </div>
@@ -69,12 +70,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
-import SubmitButton from "@/common/components/SubmitButton.vue";
-
-import { formInputClassSize } from "@/common/mixins";
 
 import { ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
@@ -82,9 +80,7 @@ export default {
   name: "OrderAddress",
   components: {
     FormInput,
-    SubmitButton,
   },
-  mixins: [formInputClassSize],
   data() {
     return {
       ADDRESS_FORM_INPUT_DATA,
@@ -100,11 +96,11 @@ export default {
       type: String,
       default: "",
     },
-    house: {
+    building: {
       type: String,
       default: "",
     },
-    apartment: {
+    flat: {
       type: String,
       default: "",
     },
@@ -124,7 +120,7 @@ export default {
       type: Function,
       default: () => {},
     },
-    submitButtonClickHandler: {
+    formSubmitHandler: {
       type: Function,
       default: () => {},
     },
@@ -139,9 +135,16 @@ export default {
   },
   computed: {
     ...mapState("Orders", ["editingAddress"]),
+    ...mapGetters(["formInputSizeClass", "fullAddress"]),
 
     address() {
-      return `${this.street}, д. ${this.house}, кв. ${this.apartment}`;
+      const data = {
+        street: this.street,
+        building: this.building,
+        flat: this.flat,
+      };
+
+      return this.fullAddress(data);
     },
   },
 };

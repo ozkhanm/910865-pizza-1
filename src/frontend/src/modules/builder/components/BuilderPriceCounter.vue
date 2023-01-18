@@ -1,11 +1,11 @@
 <template>
   <div class="content__result">
-    <p>Итого: {{ totalPizzaPrice }} ₽</p>
+    <p>Итого: {{ pizzaPrice(currentSize, currentDough, currentSauce, selectedIngredients, getEntityById) }} ₽</p>
 
     <button
       type="button"
       class="button"
-      :disabled="disabled"
+      :disabled="isButtonDisabled"
       @click="submitButtonClickHandler"
     >
       Готовьте!
@@ -15,9 +15,6 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from "vuex";
-
-import { generateRandomNumberInRange } from "@/common/helpers";
-import { MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER } from "@/common/constants";
 
 import {
   ADD_TO_CART,
@@ -31,10 +28,12 @@ export default {
   computed: {
     ...mapState("Builder", ["currentDough", "currentSize", "currentSauce", "selectedIngredients", "pizzaName", "editingPizza"]),
     ...mapState("Cart", ["cart"]),
-    ...mapGetters("Builder", ["totalPizzaPrice"]),
+    ...mapGetters(["getEntityById", "pizzaPrice"]),
 
-    disabled() {
-      return this.totalPizzaPrice === 0 || (Object.keys(this.selectedIngredients).length === 0 || this.pizzaName.length === 0);
+    isButtonDisabled() {
+      const pizzaPrice = this.pizzaPrice(this.currentSize, this.currentDough, this.currentSauce, this.selectedIngredients, this.getEntityById);
+
+      return pizzaPrice === 0 || (this.selectedIngredients.length === 0 || this.pizzaName.length === 0);
     },
   },
   methods: {
@@ -49,14 +48,12 @@ export default {
 
     submitButtonClickHandler() {
       const newCartItem = {
-        dough: this.currentDough,
-        size: this.currentSize,
-        sauce: this.currentSauce,
+        doughId: this.currentDough,
+        sizeId: this.currentSize,
+        sauceId: this.currentSauce,
         ingredients: this.selectedIngredients,
         name: this.pizzaName,
-        price: this.totalPizzaPrice,
-        amount: 1,
-        id: this.editingPizza ? this.editingPizza.id : generateRandomNumberInRange(MAX_PIZZA_ID_NUMBER, MIN_PIZZA_ID_NUMBER),
+        quantity: 1,
       };
 
       if (this.editingPizza) {
@@ -64,7 +61,7 @@ export default {
 
         this.updateExistingPizza({
           ...newCartItem,
-          amount: oldItemData.amount,
+          quantity: oldItemData.quantity,
         });
         this.setEditingPizza(null);
       } else {

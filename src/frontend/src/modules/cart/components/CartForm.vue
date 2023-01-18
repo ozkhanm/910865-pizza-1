@@ -14,9 +14,10 @@
           <option
             v-for="(option, id) in selectOptions"
             :key="id"
-            :value="id"
+            :value="option.id"
+            :selected="deliveryType === option.name"
           >
-            {{ option }}
+            {{ option.name }}
           </option>
         </select>
       </FormInput>
@@ -27,6 +28,9 @@
         inputType="text"
         inputName="tel"
         placeholder="+7 999-999-99-99"
+        :required="true"
+        :value="phone"
+        :inputChangeHandler="updatePhoneValue"
       />
 
       <div
@@ -38,14 +42,14 @@
         <FormInput
           v-for="(formData, dataId) in CART_ADDRESS_FORM_INPUT_DATA"
           :key="dataId"
-          :class="`cart-form__input ${$formInputClassSize(additionalSizeClass, formData.size)}`"
+          :class="`cart-form__input ${formInputSizeClass(additionalSizeClass, formData.size)}`"
           :text="formData.text"
           :inputType="formData.inputType"
           :inputName="formData.inputName"
           :required="formData.required"
-          :value="isDefaultOption ? '' : currentDeliveryAddress[inputName]"
+          :value="cartFormInputValue(formData)"
           :disabled="!isDefaultOption"
-          :inputChangeHandler="updateStreetValue"
+          :inputChangeHandler="deliveryFormInputHandler(formData.inputName)"
         />
       </div>
     </div>
@@ -53,11 +57,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 import FormInput from "@/common/components/FormInput.vue";
-
-import { formInputClassSize } from "@/common/mixins";
 
 import { UNAUTHORIZED_OPTIONS, OPTIONS, CART_ADDRESS_FORM_INPUT_DATA } from "@/common/constants";
 
@@ -66,7 +68,8 @@ import {
   SET_DELIVERY_ADDRESS,
   UPDATE_STREET_VALUE,
   UPDATE_HOUSE_VALUE,
-  UPDATE_APARTMENT_VALUE
+  UPDATE_APARTMENT_VALUE,
+  UPDATE_PHONE_VALUE
 } from "@/store/mutation-types";
 
 export default {
@@ -74,7 +77,6 @@ export default {
   components: {
     FormInput,
   },
-  mixins: [formInputClassSize],
   data() {
     return {
       OPTIONS,
@@ -83,22 +85,23 @@ export default {
     };
   },
   computed: {
-    ...mapState("Auth", ["isAuthorized"]),
-    ...mapState("Cart", ["deliveryType", "currentDeliveryAddress"]),
+    ...mapState("Auth", ["isAuthenticated"]),
+    ...mapState("Cart", ["deliveryType", "currentDeliveryAddress", "phone"]),
     ...mapState("Orders", ["userAddresses"]),
+    ...mapGetters(["formInputSizeClass"]),
 
     selectOptions() {
-      return this.isAuthorized ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => it.name)] : UNAUTHORIZED_OPTIONS;
+      return this.isAuthenticated ? [...UNAUTHORIZED_OPTIONS, ...this.userAddresses.map(it => ({
+        name: it.name,
+        id: it.id,
+      }))] : UNAUTHORIZED_OPTIONS;
     },
     cartFormAddressLabel() {
-      if (!Object.values(OPTIONS).includes(this.deliveryType)) {
+      if (!this.isDefaultOption(this.deliveryType)) {
         return "Адрес:";
       }
 
       return "Новый адрес:";
-    },
-    isDefaultOption() {
-      return Object.values(OPTIONS).includes(this.deliveryType);
     },
   },
   methods: {
@@ -108,22 +111,46 @@ export default {
       updateStreetValue: UPDATE_STREET_VALUE,
       updateHouseValue: UPDATE_HOUSE_VALUE,
       updateApartmentValue: UPDATE_APARTMENT_VALUE,
+      updatePhoneValue: UPDATE_PHONE_VALUE,
     }),
 
+    isDefaultOption(option) {
+      return Object.values(OPTIONS).includes(option);
+    },
     selectChangeHandler(e) {
-      const selectedOption = e.target.selectedOptions[0].text;
+      const selectedOption = {
+        name: e.target.selectedOptions[0].text,
+        id: parseInt(e.target.selectedOptions[0].value),
+      };
 
-      this.setDeliveryType(selectedOption);
+      this.setDeliveryType(selectedOption.name);
 
-      if (selectedOption === OPTIONS.GET_BY_MYSELF) {
+      if (this.isDefaultOption(selectedOption.name)) {
         this.setDeliveryAddress(null);
       }
 
-      if (!Object.values(OPTIONS).includes(selectedOption)) {
-        const currentAddress = this.userAddresses.find(it => it.name === selectedOption);
+      if (!this.isDefaultOption(selectedOption.name)) {
+        const currentAddress = this.userAddresses.find(it => it.id === selectedOption.id);
 
         this.setDeliveryAddress(currentAddress);
       }
+    },
+    deliveryFormInputHandler(inputName) {
+      const INPUT_HANDLER_MAP = {
+        street: this.updateStreetValue,
+        building: this.updateHouseValue,
+        flat: this.updateApartmentValue,
+        phone: this.updatePhoneValue,
+      };
+
+      return INPUT_HANDLER_MAP[inputName];
+    },
+    cartFormInputValue(formData) {
+      if (this.currentDeliveryAddress !== null) {
+        return this.currentDeliveryAddress[formData.inputName] ?? "";
+      }
+
+      return this.isDefaultOption ? "" : this.currentDeliveryAddress[formData.inputName];
     },
   }
 };

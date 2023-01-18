@@ -35,12 +35,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("Builder", ["pizzas"]),
+    ...mapState(["sizes"]),
     ...mapState("Builder", ["currentSize"]),
-
-    sizes() {
-      return this.pizzas.sizes;
-    },
   },
   methods: {
     ...mapMutations("Builder", {

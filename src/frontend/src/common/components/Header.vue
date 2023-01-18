@@ -14,11 +14,11 @@
     </div>
 
     <div
-      v-if="!isAuthorized"
+      v-if="!isAuthenticated"
       class="header__user"
     >
       <RouterLink
-        to="/sign-in"
+        to="/login"
         class="header__login"
       >
         <span>Войти</span>
@@ -36,11 +36,11 @@
         <picture>
           <source
             type="image/webp"
-            :srcset="$imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + $imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
+            :srcset="imageWithExtensionLink(user.avatar, '.webp') + ' 1x,' + imageWithExtensionLink(user.avatar, '@2x.webp') + ' 2x'"
           >
           <img
-            :src="$imageLink(user.avatar)"
-            :srcset="$imageWithExtensionLink(user.avatar, '@2x.jpg')"
+            :src="user.avatar"
+            :srcset="imageWithExtensionLink(user.avatar, '@2x.jpg')"
             :alt="user.name"
             width="32"
             height="32"
@@ -52,7 +52,7 @@
         href="#"
         class="header__logout"
         @click.prevent
-        @click="logoutButtonClickHandler"
+        @click="$logout"
       >
         <span>Выйти</span>
       </a>
@@ -65,39 +65,29 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 import AppLogo from "@/common/components/AppLogo.vue";
 
-import { imageLink, imageWithExtensionLink } from "@/common/mixins";
-
+import { logout } from "@/common/mixins";
 import { SIDEBAR_MENU } from "@/common/constants"
 
-import { CHANGE_ACTIVE_SIDEBAR_MENU, CHANGE_AUTH_STATUS } from "@/store/mutation-types";
+import { CHANGE_ACTIVE_SIDEBAR_MENU } from "@/store/mutation-types";
 
 export default {
   name: "Header",
   components: {
     AppLogo,
   },
-  mixins: [imageLink, imageWithExtensionLink],
+  mixins: [logout],
   computed: {
-    ...mapState("Auth", ["user", "isAuthorized"]),
+    ...mapState("Auth", ["user", "isAuthenticated"]),
     ...mapGetters("Cart", ["totalOrderPrice"]),
+    ...mapGetters(["imageWithExtensionLink"]),
   },
   methods: {
     ...mapMutations("Orders", {
       changeActiveSidebarMenu: CHANGE_ACTIVE_SIDEBAR_MENU,
     }),
-    ...mapMutations("Auth", {
-      changeAuthStatus: CHANGE_AUTH_STATUS,
-    }),
 
     profileIconClickHandler() {
       this.changeActiveSidebarMenu(SIDEBAR_MENU.USER_DATA.LABEL);
-    },
-    logoutButtonClickHandler() {
-      this.changeAuthStatus(false);
-
-      if (this.$router.currentRoute.name !== "Index") {
-        this.$router.push({ name: "Index" });
-      }
     },
   },
 };

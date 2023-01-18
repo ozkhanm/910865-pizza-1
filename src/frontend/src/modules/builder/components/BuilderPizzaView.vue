@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 import AppDrop from "@/common/components/AppDrop.vue";
 
@@ -37,22 +37,27 @@ export default {
   },
   computed: {
     ...mapState("Builder", ["selectedIngredients", "currentDough", "currentSauce"]),
+    ...mapGetters(["getEntityById"]),
 
     getCustomPizzaClass() {
-      return `pizza--foundation--${doughClassMap[this.currentDough]}-${sauceMap[this.currentSauce]}`;
+      const doughName = this.getEntityById("dough", this.currentDough)?.name;
+      const sauceName = this.getEntityById("sauces", this.currentSauce)?.name;
+
+      return `pizza--foundation--${doughClassMap[doughName]}-${sauceMap[sauceName]}`;
     },
   },
   methods: {
     getPizzaFillingClass(item) {
+      const ingredientName = this.getEntityById("ingredients", item.ingredientId).name;
       let additionalIngredientsClass = "";
 
-      if (item.amount === 2) {
+      if (item.quantity === 2) {
         additionalIngredientsClass = "pizza__filling--second";
-      } else if (item.amount === 3) {
+      } else if (item.quantity === 3) {
         additionalIngredientsClass = "pizza__filling--third";
       }
 
-      return `pizza__filling--${ingredientsMap[item.name]} ${additionalIngredientsClass}`;
+      return `pizza__filling--${ingredientsMap[ingredientName]} ${additionalIngredientsClass}`;
     },
   },
 };

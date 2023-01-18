@@ -13,9 +13,9 @@
         <input
           type="radio"
           :name="itemName"
-          :value="`${itemMap[item.name]}`"
+          :value="item.id"
           :class="inputClass"
-          :checked="item.name === value"
+          :checked="item.id === value"
           @change="radioInputChangeHandler"
         >
 
@@ -28,8 +28,6 @@
 
 <script>
 import SelectorItem from "@/common/components/SelectorItem.vue";
-
-import { ITEMS_INPUT_DATA } from "@/common/constants";
 
 export default {
   name: "RadioButton",
@@ -54,7 +52,7 @@ export default {
       required: false,
     },
     value: {
-      type: String,
+      type: Number,
       required: true,
     },
     inputChangeHandler: {
@@ -64,23 +62,23 @@ export default {
   },
   computed: {
     containerClass() {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__sauce" : `sheet__content ${this.itemName}`;
+      return this.itemName === "sauce" ? "ingredients__sauce" : `sheet__content ${this.itemName}`;
     },
     inputClass() {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "" : "visually-hidden";
+      return this.itemName === "sauce" ? "" : "visually-hidden";
     },
     checkIsDoughComponent() {
-      return this.itemName === ITEMS_INPUT_DATA.DOUGH.ITEM_NAME;
+      return this.itemName === "dough";
     },
   },
   methods: {
     labelClass(name) {
-      return this.itemName === ITEMS_INPUT_DATA.SAUCE.ITEM_NAME ? "ingredients__input radio" : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
+      return this.itemName === "sauce" ? "ingredients__input radio" : `${this.itemName}__input ${this.itemName}__input--${this.itemMap[name]}`;
     },
     radioInputChangeHandler(e) {
-      const updValue = Object.entries(this.itemMap).find(([, b]) => b === e.target.value)[0];
+      const itemId = this.items.find(it => it.id === parseInt(e.target.value)).id;
 
-      this.inputChangeHandler(updValue);
+      this.inputChangeHandler(itemId);
     },
   },
 };

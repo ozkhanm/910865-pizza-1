@@ -1,45 +1,40 @@
 <template>
   <li>
     <img
-      :src="$imageLink(image)"
+      :src="miscData.image"
       width="20"
       height="30"
-      :alt="name"
+      :alt="miscData.name"
     >
     <p>
-      <span>{{ name }}</span>
+      <span>{{ miscData.name }}</span>
       <b>{{ priceText }} ₽</b>
     </p>
   </li>
 </template>
 
 <script>
-import { imageLink } from "@/common/mixins";
+import { mapGetters } from "vuex";
 
 export default {
   name: "OrderItemAdditional",
-  mixins: [imageLink],
   props: {
-    name: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-    },
-    amount: {
-      type: Number,
+    orderMisc: {
+      type: Object,
       required: true,
     },
   },
   computed: {
+    ...mapGetters(["getEntityById"]),
+
+    miscData() {
+      return this.getEntityById("misc", this.orderMisc.miscId);
+    },
     priceText() {
-      return this.amount > 1 ? `${this.amount}х${this.price}` : this.price;
+      const { price } = this.miscData;
+      const { quantity } = this.orderMisc;
+
+      return quantity > 1 ? `${quantity}х${price}` : price;
     },
   },
 };

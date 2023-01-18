@@ -11,9 +11,9 @@
       <div class="product__text">
         <h2>{{ name }}</h2>
         <ul>
-          <li>{{ doughText }}</li>
-          <li>{{ sauceText }}</li>
-          <li>{{ ingredientsText }}</li>
+          <li>{{ doughText(sizeId, doughId, getEntityById) }}</li>
+          <li>{{ sauceText(sauceId, getEntityById) }}</li>
+          <li>{{ ingredientsText(ingredients, ingredientsList) }}</li>
         </ul>
       </div>
     </div>
@@ -23,53 +23,46 @@
 </template>
 
 <script>
-import { doughSpellingMap } from "@/common/constants";
-import { getDoughText, getSauceText, getIngredientsText } from "@/common/helpers.js";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "OrderItem",
   props: {
-    dough: {
-      type: String,
+    doughId: {
+      type: Number,
       required: true,
     },
-    size: {
-      type: String,
+    sizeId: {
+      type: Number,
       required: true,
     },
-    sauce: {
-      type: String,
+    sauceId: {
+      type: Number,
       required: true,
     },
     ingredients: {
-      type: Object,
+      type: Array,
       required: true,
     },
     name: {
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
-    amount: {
+    quantity: {
       type: Number,
       required: true,
     },
   },
   computed: {
-    doughText() {
-      return getDoughText(this.size, this.dough, doughSpellingMap);
-    },
-    sauceText() {
-      return getSauceText(this.sauce);
-    },
-    ingredientsText() {
-      return getIngredientsText(this.ingredients);
-    },
+    ...mapState({
+      ingredientsList: "ingredients",
+    }),
+    ...mapGetters(["getEntityById", "pizzaPrice", "doughText", "sauceText", "ingredientsText"]),
+
     priceText() {
-      return this.amount > 1 ? `${this.amount}х${this.price}` : this.price;
+      const price = this.pizzaPrice(this.sizeId, this.doughId, this.sauceId, this.ingredients, this.getEntityById);
+
+      return this.quantity > 1 ? `${this.quantity}х${price}` : price;
     },
   },
 };
