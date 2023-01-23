@@ -6,12 +6,18 @@
     >
       <AppDrop>
         <div class="pizza__wrapper">
-          <div
-            v-for="item in selectedIngredients"
-            :key="item.id"
-            class="pizza__filling"
-            :class="getPizzaFillingClass(item)"
-          />
+          <transition-group
+            name="filling"
+            appear
+            enter-active-class="animate__animated animate__bounceIn"
+          >
+            <div
+              v-for="item in selectedIngredients"
+              :key="item.ingredientId"
+              class="pizza__filling"
+              :class="getPizzaFillingClass(item)"
+            />
+          </transition-group>
         </div>
       </AppDrop>
     </div>

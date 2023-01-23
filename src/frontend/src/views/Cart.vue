@@ -9,7 +9,9 @@
           <h1 class="title title--big">Корзина</h1>
         </div>
 
-        <CartPopup v-if="showModal" />
+        <transition name="popup">
+          <CartPopup v-if="showModal" />
+        </transition>
 
         <ul
           v-if="cart.length"
@@ -101,5 +103,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.popup-enter-active, .popup-leave-active {
+  transition: opacity .5s;
+}
 
+.popup-enter, .popup-leave-to {
+  opacity: 0;
+}
 </style>
